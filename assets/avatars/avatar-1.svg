@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Avatar 1: Swapnil Patil (Tech Founder / Admin) -->
+  <circle cx="60" cy="60" r="60" fill="#E8F4F8" />
+  <circle cx="60" cy="48" r="22" fill="#E28743" />
+  <!-- Hair -->
+  <path d="M40 44 C40 30 50 24 60 24 C70 24 80 30 80 44 C80 36 74 30 60 30 C46 30 40 36 40 44 Z" fill="#2E1C14" />
+  <!-- Face & Eyes -->
+  <circle cx="53" cy="46" r="2.5" fill="#2E1C14" />
+  <circle cx="67" cy="46" r="2.5" fill="#2E1C14" />
+  <!-- Eyeglasses -->
+  <rect x="46" y="41" width="13" height="10" rx="3" fill="none" stroke="#702507" stroke-width="2" />
+  <rect x="61" y="41" width="13" height="10" rx="3" fill="none" stroke="#702507" stroke-width="2" />
+  <line x1="59" y1="46" x2="61" y2="46" stroke="#702507" stroke-width="2" />
+  <!-- Smile -->
+  <path d="M54 56 Q 60 61 66 56" stroke="#702507" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Shirt & Blazer -->
+  <path d="M24 106 C24 86 42 78 60 78 C78 78 96 86 96 106" fill="#702507" />
+  <path d="M52 78 L60 94 L68 78" fill="#FFFFFF" />
+  <polygon points="58,82 62,82 61,96 59,96" fill="#FF7A18" />
+</svg>

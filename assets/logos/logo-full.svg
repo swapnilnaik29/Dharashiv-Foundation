@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" fill="none">
+  <defs>
+    <linearGradient id="dfGradFull" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF7A18" />
+      <stop offset="50%" stop-color="#A83208" />
+      <stop offset="100%" stop-color="#702507" />
+    </linearGradient>
+    <linearGradient id="sunGradFull" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#FF7A18" />
+      <stop offset="100%" stop-color="#FFA858" />
+    </linearGradient>
+    <filter id="shadowFull" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#702507" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <!-- Left Icon Emblem (64x64 at x=8, y=8) -->
+  <g transform="translate(8, 8)">
+    <rect x="0" y="0" width="64" height="64" rx="16" fill="url(#dfGradFull)" filter="url(#shadowFull)" />
+    <circle cx="32" cy="32" r="26" stroke="#FFF0E2" stroke-opacity="0.25" stroke-width="1.5" stroke-dasharray="3 2" />
+    <path d="M16 40 Q 32 22 48 40" stroke="url(#sunGradFull)" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <path d="M24 50 V 26 C24 21 28 17 32 17 C36 17 40 21 40 26 V 50" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M28 50 V 30 C28 27 30 25 32 25 C34 25 36 27 36 30 V 50" stroke="#FFF0E2" stroke-width="2" fill="#FFF0E2" fill-opacity="0.15" />
+    <circle cx="32" cy="17" r="3.5" fill="#FF7A18" stroke="#FFFFFF" stroke-width="1.8" />
+    <circle cx="16" cy="40" r="3" fill="#FFA858" stroke="#FFFFFF" stroke-width="1.5" />
+    <circle cx="48" cy="40" r="3" fill="#FFA858" stroke="#FFFFFF" stroke-width="1.5" />
+    <circle cx="24" cy="50" r="2.5" fill="#FFFFFF" />
+    <circle cx="40" cy="50" r="2.5" fill="#FFFFFF" />
+  </g>
+
+  <!-- Brand Typography -->
+  <text x="88" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="800" fill="#702507" letter-spacing="1.5">
+    DHARASHIV
+  </text>
+  <text x="88" y="56" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#A83208" letter-spacing="3.5">
+    FOUNDATION
+  </text>
+  <text x="88" y="70" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="500" fill="#777783" letter-spacing="0.8">
+    REGIONAL COMMUNITY NETWORK
+  </text>
+</svg>

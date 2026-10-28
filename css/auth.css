@@ -1,0 +1,272 @@
+/**
+ * Dharashiv Foundation - Authentication & Registration Styles
+ */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 10% 20%, #FFF0E2 0%, var(--color-warm-bg) 90%);
+  padding: 1.5rem;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 960px;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-xl);
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  overflow: hidden;
+}
+
+/* Left Hero / Brand showcase */
+.auth-hero {
+  background: linear-gradient(135deg, var(--color-primary-dark-brown) 0%, #4D1804 100%);
+  color: #FFFFFF;
+  padding: 3.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-hero::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 220px;
+  height: 220px;
+  border-radius: var(--radius-full);
+  background: radial-gradient(circle, rgba(255, 122, 24, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.auth-hero-header img {
+  height: 48px;
+  margin-bottom: 2rem;
+}
+
+.auth-hero-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extrabold);
+  line-height: 1.25;
+  margin-bottom: 1rem;
+  color: #FFFFFF;
+}
+
+.auth-hero-title span {
+  color: var(--color-primary-orange);
+}
+
+.auth-hero-desc {
+  font-size: var(--font-size-base);
+  color: #FFF0E2;
+  opacity: 0.9;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.auth-hero-features {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.auth-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--font-size-sm);
+  color: #FFFFFF;
+}
+
+.auth-feature-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 122, 24, 0.2);
+  color: var(--color-primary-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.auth-hero-footer {
+  font-size: var(--font-size-xs);
+  color: rgba(255, 240, 226, 0.6);
+  border-top: 1px solid rgba(255, 240, 226, 0.15);
+  padding-top: 1rem;
+}
+
+/* Right Content / Sign-in form */
+.auth-form-side {
+  padding: 3.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-form-header {
+  margin-bottom: 2rem;
+}
+
+.auth-form-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-dark-brown);
+  margin-bottom: 0.5rem;
+}
+
+.auth-form-sub {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+/* Official Google Sign-In Button */
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  width: 100%;
+  padding: 0.85rem 1.25rem;
+  background: #FFFFFF;
+  color: #3c4043;
+  border: 1px solid #dadce0;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.btn-google:hover {
+  background: #F8FAFC;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  border-color: #c2c5ca;
+}
+
+.btn-google svg {
+  width: 20px;
+  height: 20px;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.75rem 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.auth-divider::before, .auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.auth-divider span {
+  padding: 0 0.85rem;
+}
+
+.auth-security-notice {
+  background: var(--color-warm-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.auth-security-icon {
+  color: var(--color-success);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ---------------- Registration Multi-Step Card ---------------- */
+.registration-container {
+  width: 100%;
+  max-width: 820px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  margin: 2rem auto;
+}
+
+.registration-header {
+  background: linear-gradient(135deg, var(--color-primary-dark-brown) 0%, #4D1804 100%);
+  color: #FFFFFF;
+  padding: 2rem 2.5rem;
+  text-align: center;
+}
+
+.registration-steps {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1.25rem 2rem;
+  background: var(--color-warm-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.reg-step-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+}
+
+.reg-step-number {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--color-border);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reg-step-item.active {
+  color: var(--color-primary-orange);
+}
+
+.reg-step-item.active .reg-step-number {
+  background: var(--color-primary-orange);
+  color: #FFFFFF;
+}
+
+.reg-step-item.completed {
+  color: var(--color-success);
+}
+
+.reg-step-item.completed .reg-step-number {
+  background: var(--color-success);
+  color: #FFFFFF;
+}
+
+.registration-body {
+  padding: 2.5rem;
+}

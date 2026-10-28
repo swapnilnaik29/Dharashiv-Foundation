@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Avatar 4: Aniket Kadam (Manufacturing & Solar) -->
+  <circle cx="60" cy="60" r="60" fill="#FFFBEB" />
+  <circle cx="60" cy="50" r="22" fill="#E2A77E" />
+  <path d="M38 46 C38 32 48 24 60 24 C72 24 82 32 82 46 C80 34 70 30 60 30 C50 30 40 34 38 46 Z" fill="#1E293B" />
+  <circle cx="52" cy="48" r="2.2" fill="#1E293B" />
+  <circle cx="68" cy="48" r="2.2" fill="#1E293B" />
+  <!-- Beard & Mustache -->
+  <path d="M50 56 Q 60 59 70 56" stroke="#1E293B" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M46 56 C46 68 52 74 60 74 C68 74 74 68 74 56" fill="#1E293B" opacity="0.15" />
+  <!-- Polo Shirt -->
+  <path d="M26 106 C26 86 42 78 60 78 C78 78 94 86 94 106" fill="#A83208" />
+  <path d="M54 78 L60 92 L66 78" fill="#FFF0E2" />
+</svg>

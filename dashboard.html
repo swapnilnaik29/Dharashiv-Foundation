@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Member Dashboard | Dharashiv Foundation</title>
+  <meta name="description" content="Dharashiv Foundation Member Dashboard — regional networking, updates, and community activity.">
+  <link rel="icon" type="image/svg+xml" href="/assets/logos/favicon.svg">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Sidebar injected via navigation.js -->
+    <div id="sidebarContainer"></div>
+
+    <div class="app-main">
+      <!-- Header injected via navigation.js -->
+      <div id="headerContainer"></div>
+
+      <main class="app-content">
+
+        <!-- Welcome Banner -->
+        <section class="welcome-banner">
+          <div class="welcome-content">
+            <h1 class="welcome-title" id="welcomeUserGreeting">Welcome to Dharashiv Foundation</h1>
+            <p class="welcome-subtitle">
+              Your centralized gateway to business connections, rural innovation, and careers across all 8 talukas of Dharashiv district.
+            </p>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <a href="/feed.html" class="btn btn-primary">Go to Social Feed</a>
+              <a href="/discover.html" class="btn btn-secondary">Discover Members</a>
+            </div>
+          </div>
+
+          <!-- Profile Completion Widget -->
+          <div class="profile-completion-card">
+            <div class="completion-header">
+              <span>Profile Strength</span>
+              <span id="profileCompletionPercent" style="color: var(--color-primary-orange);">100%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="profileCompletionFill" style="width: 100%;"></div>
+            </div>
+            <div class="completion-text" id="profileCompletionHint">
+              ✓ All regional and business details completed!
+            </div>
+          </div>
+        </section>
+
+        <!-- Community Updates Ticker -->
+        <div class="community-ticker">
+          <span class="ticker-label">Live Update</span>
+          <div class="ticker-content" id="dashboardTickerText">
+            Dharashiv Agri & Tech Summit 2026 registration is open • 45 new Solar Pump installations completed in Paranda • New IT & Web Developer vacancies posted in Dharashiv MIDC.
+          </div>
+        </div>
+
+        <!-- Quick Actions Row -->
+        <div class="quick-actions">
+          <a href="/feed.html" class="quick-action-card">
+            <div class="quick-action-icon">✍️</div>
+            <div>
+              <div class="quick-action-title">Create Post</div>
+              <div class="quick-action-desc">Share project updates</div>
+            </div>
+          </a>
+          <a href="/jobs.html" class="quick-action-card">
+            <div class="quick-action-icon">💼</div>
+            <div>
+              <div class="quick-action-title">Post a Job</div>
+              <div class="quick-action-desc">Hire local talent</div>
+            </div>
+          </a>
+          <a href="/discover.html" class="quick-action-card">
+            <div class="quick-action-icon">🔍</div>
+            <div>
+              <div class="quick-action-title">Browse Directory</div>
+              <div class="quick-action-desc">Filter by Taluka</div>
+            </div>
+          </a>
+          <a href="/connections.html" class="quick-action-card">
+            <div class="quick-action-icon">🤝</div>
+            <div>
+              <div class="quick-action-title">My Network</div>
+              <div class="quick-action-desc">Manage connections</div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+
+          <!-- Left Main Column -->
+          <div class="dashboard-column">
+
+            <!-- People You May Know -->
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">People You May Know in Dharashiv</h2>
+                <a href="/discover.html" class="btn btn-sm btn-outline">View All</a>
+              </div>
+              <div class="card-body">
+                <div id="peopleYouMayKnowGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Community Posts -->
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Recent Community Updates</h2>
+                <a href="/feed.html" class="btn btn-sm btn-outline">Explore Feed</a>
+              </div>
+              <div class="card-body" id="recentPostsPreviewContainer" style="padding: 0;">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Sidebar Column -->
+          <div class="dashboard-column">
+
+            <!-- Upcoming Events Mini -->
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Upcoming Events</h2>
+                <a href="/events.html" class="btn btn-sm btn-outline">All Events</a>
+              </div>
+              <div class="card-body" id="dashboardEventsPreview">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+            <!-- Latest Announcements -->
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Official Announcements</h2>
+                <a href="/announcements.html" class="btn btn-sm btn-outline">View All</a>
+              </div>
+              <div class="card-body" id="dashboardAnnouncementsPreview">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+            <!-- New Job Opportunities -->
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Featured Jobs</h2>
+                <a href="/jobs.html" class="btn btn-sm btn-outline">Find Jobs</a>
+              </div>
+              <div class="card-body" id="dashboardJobsPreview">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script type="module">
+    import { requireAuth } from '/js/guards.js';
+    import { initNavigation } from '/js/navigation.js';
+    import { mockStore } from '/js/mock-store.js';
+    import { getSupabase } from '/js/supabase-client.js';
+    import { escapeHtml, formatRelativeTime, formatDate } from '/js/ui.js';
+
+    (async () => {
+      const auth = await requireAuth();
+      if (!auth) return;
+
+      const { profile } = auth;
+      await initNavigation('dashboard');
+
+      // Set greeting
+      const greeting = document.getElementById('welcomeUserGreeting');
+      if (greeting && profile?.full_name) {
+        greeting.textContent = `Namaskar, ${profile.full_name.split(' ')[0]}!`;
+      }
+
+      // Populate People You May Know
+      const peopleGrid = document.getElementById('peopleYouMayKnowGrid');
+      const otherMembers = mockStore.getProfiles().filter(p => p.id !== profile.id).slice(0, 3);
+
+      if (peopleGrid) {
+        peopleGrid.innerHTML = otherMembers.map(m => `
+          <div style="background: var(--color-warm-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1rem; text-align: center;">
+            <img src="${m.avatar_url || '/assets/avatars/default-avatar.svg'}" style="width: 56px; height: 56px; border-radius: 9999px; margin: 0 auto 0.5rem auto; object-fit: cover;" alt="Avatar" />
+            <div style="font-weight: 700; color: var(--color-primary-dark-brown); font-size: 0.9rem;">${escapeHtml(m.full_name)}</div>
+            <div style="font-size: 0.72rem; color: var(--color-primary-rust); font-weight: 600;">${escapeHtml(m.profession || 'Member')}</div>
+            <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.75rem;">📍 ${escapeHtml(m.taluka || 'Dharashiv')}</div>
+            <a href="/profile.html?id=${m.id}" class="btn btn-sm btn-outline" style="width: 100%;">View Profile</a>
+          </div>
+        `).join('');
+      }
+
+      // Populate Recent Posts Preview
+      const postsContainer = document.getElementById('recentPostsPreviewContainer');
+      const recentPosts = mockStore.getPosts().slice(0, 2);
+      if (postsContainer) {
+        postsContainer.innerHTML = recentPosts.map(p => `
+          <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border-light);">
+            <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 0.5rem;">
+              <img src="${p.author?.avatar_url || '/assets/avatars/default-avatar.svg'}" style="width: 36px; height: 36px; border-radius: 9999px;" alt="Avatar" />
+              <div>
+                <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary-dark-brown);">${escapeHtml(p.author?.full_name || 'Member')}</div>
+                <div style="font-size: 0.72rem; color: var(--color-text-muted);">${formatRelativeTime(p.created_at)} • 📍 ${escapeHtml(p.author?.taluka || 'Dharashiv')}</div>
+              </div>
+            </div>
+            <p style="font-size: 0.88rem; line-height: 1.5; color: var(--color-text-primary); margin-bottom: 0.75rem;">
+              ${escapeHtml(p.content.slice(0, 150))}...
+            </p>
+            <div style="display: flex; gap: 1rem; font-size: 0.75rem; color: var(--color-text-muted);">
+              <span>❤️ ${p.likes_count || 0} Likes</span>
+              <span>💬 ${p.comments_count || 0} Comments</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Populate Events Preview
+      const eventsContainer = document.getElementById('dashboardEventsPreview');
+      const events = mockStore.getEvents().slice(0, 2);
+      if (eventsContainer) {
+        eventsContainer.innerHTML = events.map(e => {
+          const d = new Date(e.event_date);
+          return `
+            <div class="event-mini-item">
+              <div class="event-date-badge">
+                <span class="event-month">${d.toLocaleString('en-IN', { month: 'short' })}</span>
+                <span class="event-day">${d.getDate()}</span>
+              </div>
+              <div class="event-mini-info">
+                <div class="event-mini-title">${escapeHtml(e.title)}</div>
+                <div class="event-mini-loc">📍 ${escapeHtml(e.venue)}, ${escapeHtml(e.taluka)}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Populate Announcements Preview
+      const annContainer = document.getElementById('dashboardAnnouncementsPreview');
+      const anns = mockStore.getAnnouncements().slice(0, 2);
+      if (annContainer) {
+        annContainer.innerHTML = anns.map(a => `
+          <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--color-border-light);">
+            <span class="badge ${a.priority === 'high' ? 'badge-red' : 'badge-orange'}" style="font-size: 0.65rem; margin-bottom: 0.35rem;">
+              ${a.is_official ? 'Official Notice' : 'Notice'}
+            </span>
+            <div style="font-weight: 600; font-size: 0.85rem; color: var(--color-primary-dark-brown);">${escapeHtml(a.title)}</div>
+            <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.2rem;">${formatDate(a.created_at)}</div>
+          </div>
+        `).join('');
+      }
+
+      // Populate Featured Jobs Preview
+      const jobsContainer = document.getElementById('dashboardJobsPreview');
+      const jobs = mockStore.getJobs().slice(0, 2);
+      if (jobsContainer) {
+        jobsContainer.innerHTML = jobs.map(j => `
+          <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--color-border-light);">
+            <a href="/job-details.html?id=${j.id}" style="font-weight: 700; font-size: 0.9rem; color: var(--color-primary-dark-brown);">${escapeHtml(j.title)}</a>
+            <div style="font-size: 0.8rem; color: var(--color-primary-rust);">${escapeHtml(j.company_name)}</div>
+            <div style="font-size: 0.72rem; color: var(--color-text-muted); margin-top: 0.2rem;">📍 ${escapeHtml(j.taluka)} • 🕒 ${escapeHtml(j.job_type)}</div>
+          </div>
+        `).join('');
+      }
+
+    })();
+  </script>
+</body>
+</html>

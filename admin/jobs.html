@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Jobs | Dharashiv Foundation Admin</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/logos/favicon.svg">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="app-main">
+      <div id="headerContainer"></div>
+
+      <main class="app-content">
+
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Job Vacancies Moderation</h1>
+            <p class="page-subtitle">Review active job postings, check applicant counts, or close expired listings.</p>
+          </div>
+          <a href="/admin/index.html" class="btn btn-secondary">← Back to Overview</a>
+        </div>
+
+        <div class="data-table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Job Title</th>
+                <th>Company</th>
+                <th>Taluka</th>
+                <th>Type</th>
+                <th>Applicants</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminJobsTableBody"></tbody>
+          </table>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script type="module">
+    import { requireAdmin } from '/js/guards.js';
+    import { initNavigation } from '/js/navigation.js';
+    import { mockStore } from '/js/mock-store.js';
+    import { getSupabase } from '/js/supabase-client.js';
+    import { escapeHtml, showToast } from '/js/ui.js';
+
+    (async () => {
+      const auth = await requireAdmin();
+      if (!auth) return;
+
+      await initNavigation('admin');
+      await loadAdminJobs();
+    })();
+
+    async function loadAdminJobs() {
+      const tbody = document.getElementById('adminJobsTableBody');
+      const supabase = await getSupabase();
+      let jobs = [];
+
+      if (supabase.isMock) {
+        jobs = mockStore.getJobs();
+      } else {
+        const { data } = await supabase.from('jobs').select('*').order('created_at', { ascending: false });
+        jobs = data || [];
+      }
+
+      tbody.innerHTML = jobs.map(j => `
+        <tr id="admin-job-${j.id}">
+          <td style="font-weight: 600; color: var(--color-primary-dark-brown);">${escapeHtml(j.title)}</td>
+          <td>${escapeHtml(j.company_name)}</td>
+          <td>${escapeHtml(j.taluka)}</td>
+          <td>${escapeHtml(j.job_type)}</td>
+          <td><span class="badge badge-gray">${j.applications_count || 0}</span></td>
+          <td><span class="badge ${j.status === 'active' ? 'badge-green' : 'badge-gray'}">${j.status?.toUpperCase()}</span></td>
+          <td>
+            <div class="table-actions">
+              <a href="/job-details.html?id=${j.id}" class="btn btn-sm btn-outline">View</a>
+              <button class="btn btn-sm btn-danger delete-admin-job-btn" data-job-id="${j.id}">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      document.querySelectorAll('.delete-admin-job-btn').forEach(b => {
+        b.addEventListener('click', async () => {
+          if (confirm('Delete this job posting?')) {
+            const jid = b.dataset.jobId;
+            if (supabase.isMock) {
+              mockStore.data.jobs = mockStore.data.jobs.filter(j => j.id !== jid);
+              mockStore.save();
+            } else {
+              await supabase.from('jobs').delete().eq('id', jid);
+            }
+            showToast('Job posting removed.', 'info');
+            document.getElementById(`admin-job-${jid}`)?.remove();
+          }
+        });
+      });
+    }
+  </script>
+</body>
+</html>

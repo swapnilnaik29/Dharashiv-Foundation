@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications | Dharashiv Foundation</title>
+  <meta name="description" content="Stay updated with connection requests, messages, likes, and regional alerts.">
+  <link rel="icon" type="image/svg+xml" href="/assets/logos/favicon.svg">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="app-main">
+      <div id="headerContainer"></div>
+
+      <main class="app-content" style="max-width: 800px;">
+
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Notifications Center</h1>
+            <p class="page-subtitle">Alerts for networking connections, discussions, job status, and announcements.</p>
+          </div>
+          <button class="btn btn-secondary" id="markAllReadBtn">Mark All Read</button>
+        </div>
+
+        <div id="notificationsListContainer"></div>
+
+      </main>
+    </div>
+  </div>
+
+  <script type="module">
+    import { requireAuth } from '/js/guards.js';
+    import { initNavigation } from '/js/navigation.js';
+    import { initNotificationsPage } from '/js/notifications.js';
+
+    (async () => {
+      const auth = await requireAuth();
+      if (!auth) return;
+
+      await initNavigation('notifications');
+      await initNotificationsPage();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" fill="none">
+  <!-- Briefcase & Magnifying Glass -->
+  <rect x="50" y="55" width="140" height="90" rx="10" fill="#FAF8F5" stroke="#E8E1DA" stroke-width="2"/>
+  <rect x="65" y="70" width="110" height="60" rx="6" fill="#FFFFFF" stroke="#E8E1DA" stroke-width="1.5"/>
+  <path d="M95 55 V 45 C95 40 100 36 106 36 H134 C140 36 145 40 145 45 V 55" stroke="#702507" stroke-width="3" fill="none"/>
+  <!-- Lock / clasp -->
+  <rect x="112" y="66" width="16" height="12" rx="3" fill="#FF7A18"/>
+  <!-- Search glass floating -->
+  <circle cx="165" cy="115" r="18" fill="#FFF0E2" stroke="#A83208" stroke-width="2.5"/>
+  <line x1="178" y1="128" x2="192" y2="142" stroke="#A83208" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

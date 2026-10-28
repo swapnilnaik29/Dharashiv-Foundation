@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | Dharashiv Foundation</title>
+  <meta name="description" content="Manage your account preferences, theme, and security settings.">
+  <link rel="icon" type="image/svg+xml" href="/assets/logos/favicon.svg">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="app-main">
+      <div id="headerContainer"></div>
+
+      <main class="app-content" style="max-width: 800px;">
+
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Account & Platform Settings</h1>
+            <p class="page-subtitle">Configure your preferences, theme, and view cloud architecture status.</p>
+          </div>
+        </div>
+
+        <!-- Appearance -->
+        <div class="card" style="margin-bottom: 2rem;">
+          <div class="card-header">
+            <h3 class="card-title">Theme & Appearance</h3>
+          </div>
+          <div class="card-body">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-weight: 600; color: var(--color-primary-dark-brown);">Dark Mode</div>
+                <div style="font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 0.2rem;">
+                  Toggle dark theme with warm brown tones for night viewing.
+                </div>
+              </div>
+              <button class="btn btn-outline" id="themeToggleBtn">Toggle Dark Mode</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cloud Project Architecture Status -->
+        <div class="card" style="margin-bottom: 2rem;">
+          <div class="card-header">
+            <h3 class="card-title">Cloud Infrastructure Overview</h3>
+          </div>
+          <div class="card-body">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+              <div style="padding: 1rem; background: var(--color-warm-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+                <div style="font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase;">Authentication</div>
+                <div style="font-weight: 700; color: var(--color-primary-rust); margin-top: 0.25rem;">Google OAuth + Supabase</div>
+              </div>
+              <div style="padding: 1rem; background: var(--color-warm-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+                <div style="font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase;">Database</div>
+                <div style="font-weight: 700; color: var(--color-primary-dark-brown); margin-top: 0.25rem;">Supabase PostgreSQL (RLS)</div>
+              </div>
+              <div style="padding: 1rem; background: var(--color-warm-bg); border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+                <div style="font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase;">File Storage</div>
+                <div style="font-weight: 700; color: var(--color-primary-orange); margin-top: 0.25rem;">Amazon S3 (Presigned URLs)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="card" style="border-color: var(--color-error-border);">
+          <div class="card-header" style="background: var(--color-error-bg);">
+            <h3 class="card-title" style="color: var(--color-error);">Session & Account</h3>
+          </div>
+          <div class="card-body">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <div style="font-weight: 600; color: var(--color-text-primary);">Sign Out of Platform</div>
+                <div style="font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 0.2rem;">
+                  Terminate your active Google OAuth session on this browser.
+                </div>
+              </div>
+              <button class="btn btn-danger" id="settingsSignOutBtn">Sign Out</button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script type="module">
+    import { requireAuth } from '/js/guards.js';
+    import { initNavigation } from '/js/navigation.js';
+    import { signOut } from '/js/auth.js';
+
+    (async () => {
+      const auth = await requireAuth();
+      if (!auth) return;
+
+      await initNavigation('settings');
+
+      // Theme toggle
+      const themeBtn = document.getElementById('themeToggleBtn');
+      themeBtn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('df_theme', next);
+      });
+
+      // Sign out
+      document.getElementById('settingsSignOutBtn').addEventListener('click', async () => {
+        if (confirm('Are you sure you want to sign out?')) {
+          await signOut();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

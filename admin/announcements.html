@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Announcements | Dharashiv Foundation Admin</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/logos/favicon.svg">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="app-main">
+      <div id="headerContainer"></div>
+
+      <main class="app-content">
+
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Announcement Moderation & Publishing</h1>
+            <p class="page-subtitle">Approve member submissions, publish official Foundation notices, and manage broadcast priorities.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <a href="/admin/index.html" class="btn btn-secondary">← Back to Overview</a>
+            <a href="/announcements.html" class="btn btn-primary">Live Announcements</a>
+          </div>
+        </div>
+
+        <div class="data-table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Notice Title</th>
+                <th>Author</th>
+                <th>Priority</th>
+                <th>Type</th>
+                <th>Approval Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminAnnouncementsTableBody"></tbody>
+          </table>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script type="module">
+    import { requireAdmin } from '/js/guards.js';
+    import { initNavigation } from '/js/navigation.js';
+    import { mockStore } from '/js/mock-store.js';
+    import { getSupabase } from '/js/supabase-client.js';
+    import { escapeHtml, showToast } from '/js/ui.js';
+
+    (async () => {
+      const auth = await requireAdmin();
+      if (!auth) return;
+
+      await initNavigation('admin');
+      await loadAdminAnnouncements();
+    })();
+
+    async function loadAdminAnnouncements() {
+      const tbody = document.getElementById('adminAnnouncementsTableBody');
+      const supabase = await getSupabase();
+      let items = [];
+
+      if (supabase.isMock) {
+        items = mockStore.getAnnouncements();
+      } else {
+        const { data } = await supabase.from('announcements').select('*, author:profiles(*)').order('created_at', { ascending: false });
+        items = data || [];
+      }
+
+      tbody.innerHTML = items.map(a => `
+        <tr id="admin-ann-${a.id}">
+          <td style="font-weight: 600; color: var(--color-primary-dark-brown);">${escapeHtml(a.title)}</td>
+          <td>${escapeHtml(a.author?.full_name || 'Member')}</td>
+          <td><span class="badge ${a.priority === 'high' ? 'badge-red' : 'badge-gray'}">${escapeHtml(a.priority?.toUpperCase())}</span></td>
+          <td>${a.is_official ? '<span class="badge badge-orange">Official</span>' : 'Community'}</td>
+          <td><span class="badge ${a.status === 'approved' ? 'badge-green' : 'badge-orange'}">${escapeHtml(a.status?.toUpperCase())}</span></td>
+          <td>
+            <div class="table-actions">
+              ${a.status !== 'approved' ? `<button class="btn btn-sm btn-success approve-ann-btn" data-ann-id="${a.id}">Approve</button>` : ''}
+              <button class="btn btn-sm btn-danger delete-ann-btn" data-ann-id="${a.id}">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      document.querySelectorAll('.approve-ann-btn').forEach(b => {
+        b.addEventListener('click', async () => {
+          const aid = b.dataset.annId;
+          if (supabase.isMock) {
+            const item = mockStore.data.announcements.find(x => x.id === aid);
+            if (item) item.status = 'approved';
+            mockStore.save();
+          } else {
+            await supabase.from('announcements').update({ status: 'approved' }).eq('id', aid);
+          }
+          showToast('Announcement approved and broadcasted.', 'success');
+          await loadAdminAnnouncements();
+        });
+      });
+
+      document.querySelectorAll('.delete-ann-btn').forEach(b => {
+        b.addEventListener('click', async () => {
+          if (confirm('Delete announcement?')) {
+            const aid = b.dataset.annId;
+            if (supabase.isMock) {
+              mockStore.data.announcements = mockStore.data.announcements.filter(x => x.id !== aid);
+              mockStore.save();
+            } else {
+              await supabase.from('announcements').delete().eq('id', aid);
+            }
+            showToast('Announcement removed.', 'info');
+            document.getElementById(`admin-ann-${aid}`)?.remove();
+          }
+        });
+      });
+    }
+  </script>
+</body>
+</html>

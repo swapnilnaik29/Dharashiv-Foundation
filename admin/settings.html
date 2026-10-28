@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platform Settings | Dharashiv Foundation Admin</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/logos/favicon.svg">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="app-main">
+      <div id="headerContainer"></div>
+
+      <main class="app-content" style="max-width: 860px;">
+
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Platform & System Settings</h1>
+            <p class="page-subtitle">Configure regional community guidelines, platform feature flags, and cloud integration secrets.</p>
+          </div>
+          <a href="/admin/index.html" class="btn btn-secondary">← Back to Overview</a>
+        </div>
+
+        <!-- Community Guidelines -->
+        <div class="card" style="margin-bottom: 2rem;">
+          <div class="card-header">
+            <h3 class="card-title">Community Code of Conduct & Guidelines</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label" for="guidelinesText">Guidelines Text</label>
+              <textarea id="guidelinesText" class="form-textarea" style="min-height: 120px;">1. Foster respectful regional collaboration across all 8 talukas.
+2. Support local entrepreneurship, organic agriculture, and youth employment.
+3. No commercial spam, deceptive schemes, or inappropriate content.
+4. Verified resumes and jobs must adhere to fair regional compensation.</textarea>
+            </div>
+            <button class="btn btn-primary" id="saveGuidelinesBtn">Save Guidelines</button>
+          </div>
+        </div>
+
+        <!-- Feature Flags -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">System Feature Toggles</h3>
+          </div>
+          <div class="card-body">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <label style="display: flex; align-items: center; justify-content: space-between; font-size: 0.9rem; cursor: pointer;">
+                <div>
+                  <div style="font-weight: 600; color: var(--color-primary-dark-brown);">Realtime Direct Messaging</div>
+                  <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Enable peer-to-peer chat for connected members</div>
+                </div>
+                <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: var(--color-primary-orange);" />
+              </label>
+
+              <label style="display: flex; align-items: center; justify-content: space-between; font-size: 0.9rem; cursor: pointer;">
+                <div>
+                  <div style="font-weight: 600; color: var(--color-primary-dark-brown);">Amazon S3 Resume Uploads</div>
+                  <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Authorize candidate resume submissions via short-lived presigned URLs</div>
+                </div>
+                <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: var(--color-primary-orange);" />
+              </label>
+
+              <label style="display: flex; align-items: center; justify-content: space-between; font-size: 0.9rem; cursor: pointer;">
+                <div>
+                  <div style="font-weight: 600; color: var(--color-primary-dark-brown);">Require Post-Google Profile Completion</div>
+                  <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Direct first-time users to supply village, taluka, and profession</div>
+                </div>
+                <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: var(--color-primary-orange);" />
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script type="module">
+    import { requireAdmin } from '/js/guards.js';
+    import { initNavigation } from '/js/navigation.js';
+    import { showToast } from '/js/ui.js';
+
+    (async () => {
+      const auth = await requireAdmin();
+      if (!auth) return;
+
+      await initNavigation('admin');
+
+      document.getElementById('saveGuidelinesBtn').addEventListener('click', () => {
+        showToast('Community guidelines updated.', 'success');
+      });
+    })();
+  </script>
+</body>
+</html>

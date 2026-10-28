@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" fill="none">
+  <!-- Bell shape with clean quiet state -->
+  <path d="M120 45 C108 45 98 55 98 67 V90 L88 106 H152 L142 90 V67 C142 55 132 45 120 45 Z" fill="#FFF0E2" stroke="#702507" stroke-width="2.5"/>
+  <circle cx="120" cy="40" r="5" stroke="#702507" stroke-width="2.5" fill="none"/>
+  <path d="M112 112 C112 116.4 115.6 120 120 120 C124.4 120 128 116.4 128 112" stroke="#A83208" stroke-width="2.5" fill="none"/>
+  <!-- Checkmark shield floating next to bell indicating all caught up -->
+  <circle cx="150" cy="65" r="14" fill="#10B981" />
+  <path d="M144 65 L148 69 L156 61" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

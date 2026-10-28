@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discover Members | Dharashiv Foundation</title>
+  <meta name="description" content="Discover and connect with entrepreneurs, professionals, and innovators across Dharashiv.">
+  <link rel="icon" type="image/svg+xml" href="/assets/logos/favicon.svg">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="app-main">
+      <div id="headerContainer"></div>
+
+      <main class="app-content">
+
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Discover Community Members</h1>
+            <p class="page-subtitle">Find and connect with verified business owners, doctors, farmers, and tech leaders in Dharashiv.</p>
+          </div>
+          <a href="/connections.html" class="btn btn-secondary">My Connections</a>
+        </div>
+
+        <!-- Filters Bar -->
+        <div class="card" style="padding: 1.25rem; margin-bottom: 2rem;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; align-items: center;">
+            <div>
+              <label class="form-label" style="font-size: 0.75rem;" for="memberSearchInput">Search Name / Business / Services</label>
+              <input type="text" id="memberSearchInput" class="form-control" placeholder="e.g. Solar, Agriculture, Swapnil..." />
+            </div>
+
+            <div>
+              <label class="form-label" style="font-size: 0.75rem;" for="filterTaluka">Taluka</label>
+              <select id="filterTaluka" class="form-select">
+                <option value="">All 8 Talukas</option>
+                <option value="Dharashiv">Dharashiv</option>
+                <option value="Tuljapur">Tuljapur</option>
+                <option value="Omerga">Omerga</option>
+                <option value="Paranda">Paranda</option>
+                <option value="Bhoom">Bhoom</option>
+                <option value="Kalamb">Kalamb</option>
+                <option value="Washi">Washi</option>
+                <option value="Lohara">Lohara</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="form-label" style="font-size: 0.75rem;" for="filterCategory">Industry Sector</label>
+              <select id="filterCategory" class="form-select">
+                <option value="">All Sectors</option>
+                <option value="Information Technology & Software">IT & Software</option>
+                <option value="Agriculture & Agri-Tech">Agri-Tech & Dairy</option>
+                <option value="Renewable Energy & Solar">Solar & Energy</option>
+                <option value="Healthcare & Pharmaceuticals">Healthcare & Clinic</option>
+                <option value="Manufacturing & Engineering">Manufacturing</option>
+                <option value="Retail & Wholesale Trade">Retail & Trade</option>
+                <option value="Education & Skill Training">Education</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="form-label" style="font-size: 0.75rem;" for="filterProfession">Member Type</label>
+              <select id="filterProfession" class="form-select">
+                <option value="">All Types</option>
+                <option value="Business Owner / Entrepreneur">Entrepreneurs</option>
+                <option value="Professional / Employee">Corporate / Employees</option>
+                <option value="Doctor / Healthcare">Doctors</option>
+                <option value="Freelancer">Freelancers</option>
+                <option value="Student">Students</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Members Grid -->
+        <div id="membersGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem;">
+          <!-- Dynamically populated via js/connections.js -->
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script type="module">
+    import { requireAuth } from '/js/guards.js';
+    import { initNavigation } from '/js/navigation.js';
+    import { initDiscoverPage } from '/js/connections.js';
+
+    (async () => {
+      const auth = await requireAuth();
+      if (!auth) return;
+
+      await initNavigation('discover');
+      await initDiscoverPage();
+    })();
+  </script>
+</body>
+</html>

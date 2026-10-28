@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Industry Categories | Dharashiv Foundation Admin</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/logos/favicon.svg">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="app-main">
+      <div id="headerContainer"></div>
+
+      <main class="app-content" style="max-width: 900px;">
+
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Industry Sectors & Regional Categories</h1>
+            <p class="page-subtitle">Standardized business classifications used for member discovery, networking, and jobs.</p>
+          </div>
+          <a href="/admin/index.html" class="btn btn-secondary">← Back to Overview</a>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Configured Industry Classifications</h3>
+          </div>
+          <div class="card-body" style="padding: 0;">
+            <div class="data-table-container" style="border: none;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Sector Name</th>
+                    <th>Slug Identifier</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-weight: 600; color: var(--color-primary-dark-brown);">Agriculture & Agri-Tech</td>
+                    <td><code>agriculture-agri-tech</code></td>
+                    <td>Farming, organic produce, drip irrigation, dairy, cold chain.</td>
+                    <td><span class="badge badge-green">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600; color: var(--color-primary-dark-brown);">Renewable Energy & Solar</td>
+                    <td><code>renewable-energy</code></td>
+                    <td>Rooftop solar, agricultural pump installations, microgrids.</td>
+                    <td><span class="badge badge-green">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600; color: var(--color-primary-dark-brown);">Information Technology & Software</td>
+                    <td><code>information-technology</code></td>
+                    <td>Web development, cloud computing, IoT, software solutions.</td>
+                    <td><span class="badge badge-green">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600; color: var(--color-primary-dark-brown);">Healthcare & Pharmaceuticals</td>
+                    <td><code>healthcare-pharmaceuticals</code></td>
+                    <td>Hospitals, medical pathology labs, diagnostic clinics.</td>
+                    <td><span class="badge badge-green">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600; color: var(--color-primary-dark-brown);">Manufacturing & Engineering</td>
+                    <td><code>manufacturing-engineering</code></td>
+                    <td>Industrial fabrications, metal works, machine parts.</td>
+                    <td><span class="badge badge-green">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600; color: var(--color-primary-dark-brown);">Education & Skill Training</td>
+                    <td><code>education-skill-training</code></td>
+                    <td>Vocational academies, competitive training centers.</td>
+                    <td><span class="badge badge-green">Active</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script type="module">
+    import { requireAdmin } from '/js/guards.js';
+    import { initNavigation } from '/js/navigation.js';
+
+    (async () => {
+      const auth = await requireAdmin();
+      if (!auth) return;
+
+      await initNavigation('admin');
+    })();
+  </script>
+</body>
+</html>

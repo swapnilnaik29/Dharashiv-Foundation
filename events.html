@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Events | Dharashiv Foundation</title>
+  <meta name="description" content="Discover regional business summits, agricultural workshops, and networking events across Dharashiv.">
+  <link rel="icon" type="image/svg+xml" href="/assets/logos/favicon.svg">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="app-main">
+      <div id="headerContainer"></div>
+
+      <main class="app-content" style="max-width: 900px;">
+
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Community Events & Workshops</h1>
+            <p class="page-subtitle">Participate in regional summits, agriculture masterclasses, and entrepreneurial meetups in Dharashiv.</p>
+          </div>
+          <div>
+            <button class="btn btn-primary" id="openCreateEventModalBtn" style="display: none;">+ Create Event</button>
+          </div>
+        </div>
+
+        <!-- Events List Container -->
+        <div id="eventsListContainer"></div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Create Event Modal (Admin/Organizer) -->
+  <div class="modal-backdrop" id="createEventModal">
+    <div class="modal-container" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Schedule Regional Event</h3>
+        <button class="modal-close" data-dismiss="modal">&times;</button>
+      </div>
+      <form id="createEventForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="eventTitle">Event Title <span class="required">*</span></label>
+            <input type="text" id="eventTitle" class="form-control" placeholder="e.g. Dharashiv Business & Solar Expo" required />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="eventDate">Date & Time <span class="required">*</span></label>
+              <input type="datetime-local" id="eventDate" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="eventCategory">Category <span class="required">*</span></label>
+              <select id="eventCategory" class="form-select" required>
+                <option value="Business & Networking">Business & Networking</option>
+                <option value="Agriculture & Agri-Tech">Agriculture & Agri-Tech</option>
+                <option value="Technology & Cloud">Technology & Cloud</option>
+                <option value="Healthcare & Wellness">Healthcare & Wellness</option>
+                <option value="Skill & Youth Development">Skill & Youth Development</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="eventVenue">Venue Location <span class="required">*</span></label>
+              <input type="text" id="eventVenue" class="form-control" placeholder="e.g. APMC Auditorium" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="eventTaluka">Taluka <span class="required">*</span></label>
+              <select id="eventTaluka" class="form-select" required>
+                <option value="Dharashiv">Dharashiv</option>
+                <option value="Tuljapur">Tuljapur</option>
+                <option value="Omerga">Omerga</option>
+                <option value="Paranda">Paranda</option>
+                <option value="Bhoom">Bhoom</option>
+                <option value="Kalamb">Kalamb</option>
+                <option value="Washi">Washi</option>
+                <option value="Lohara">Lohara</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="eventCapacity">Attendee Capacity</label>
+              <input type="number" id="eventCapacity" class="form-control" value="150" min="10" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="eventDescription">Event Details & Agenda <span class="required">*</span></label>
+            <textarea id="eventDescription" class="form-textarea" required placeholder="Outline keynote speakers, topics covered, and who should attend..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="submitEventBtn">Publish Event</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { requireAuth } from '/js/guards.js';
+    import { initNavigation } from '/js/navigation.js';
+    import { initEventsPage } from '/js/events.js';
+    import { setupModalDismissers } from '/js/ui.js';
+
+    (async () => {
+      const auth = await requireAuth();
+      if (!auth) return;
+
+      await initNavigation('events');
+      setupModalDismissers();
+      await initEventsPage();
+    })();
+  </script>
+</body>
+</html>

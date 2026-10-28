@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <!-- Avatar 3: Dr. Ramesh Shinde (Healthcare / Diagnostics) -->
+  <circle cx="60" cy="60" r="60" fill="#E8F9EE" />
+  <circle cx="60" cy="50" r="22" fill="#E8B896" />
+  <!-- Hair greyish -->
+  <path d="M40 46 C40 32 50 26 60 26 C70 26 80 32 80 46 C76 36 68 32 60 32 C52 32 44 36 40 46 Z" fill="#5A5255" />
+  <circle cx="52" cy="48" r="2.2" fill="#2E1C14" />
+  <circle cx="68" cy="48" r="2.2" fill="#2E1C14" />
+  <path d="M54 58 Q 60 62 66 58" stroke="#702507" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- Doctor coat & stethoscope -->
+  <path d="M26 106 C26 86 42 78 60 78 C78 78 94 86 94 106" fill="#10B981" />
+  <path d="M48 78 L60 98 L72 78" fill="#FFFFFF" />
+  <path d="M46 84 C46 96 52 102 60 102 C68 102 74 96 74 84" stroke="#702507" stroke-width="2.5" fill="none"/>
+  <circle cx="60" cy="103" r="3.5" fill="#FF7A18" />
+</svg>

@@ -1,0 +1,144 @@
+/**
+ * Dharashiv Foundation - Responsive Breakpoints & Mobile Navigation
+ */
+
+/* Tablets and small laptops (<= 1024px) */
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-search {
+    width: 240px;
+  }
+}
+
+/* Mobile & Small Tablets (<= 768px) */
+@media (max-width: 768px) {
+  .app-sidebar {
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .app-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .app-main {
+    margin-left: 0;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .app-header {
+    padding: 0 1rem;
+  }
+
+  .header-search {
+    display: none; /* Can be opened via icon or simplified */
+  }
+
+  .app-content {
+    padding: 1.25rem 1rem;
+  }
+
+  .welcome-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .profile-completion-card {
+    width: 100%;
+  }
+
+  /* Auth Screens */
+  .auth-container {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-hero {
+    display: none;
+  }
+
+  .auth-form-side {
+    padding: 2rem 1.5rem;
+  }
+
+  .registration-steps {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .registration-body {
+    padding: 1.5rem;
+  }
+
+  .profile-avatar-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .profile-name-row {
+    text-align: center;
+  }
+
+  .profile-meta-chips {
+    justify-content: center;
+  }
+
+  .job-card {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .job-card-top {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .toast-container {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .toast {
+    min-width: auto;
+    max-width: 100%;
+  }
+}
+
+/* Extra small screens (<= 480px) */
+@media (max-width: 480px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .page-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+}

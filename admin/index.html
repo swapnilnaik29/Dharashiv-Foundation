@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Dharashiv Foundation</title>
+  <meta name="description" content="Dharashiv Foundation Administrative Control Center.">
+  <link rel="icon" type="image/svg+xml" href="/assets/logos/favicon.svg">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="app-main">
+      <div id="headerContainer"></div>
+
+      <main class="app-content">
+
+        <div class="page-header">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem;">
+              <h1 class="page-title">Administrator Portal</h1>
+              <span class="admin-header-badge">Privileged</span>
+            </div>
+            <p class="page-subtitle">Governance, member moderation, platform analytics, and regional operations.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <a href="/admin/members.html" class="btn btn-secondary">Members</a>
+            <a href="/admin/moderation.html" class="btn btn-outline" style="border-color: var(--color-error); color: var(--color-error);">Moderation Queue</a>
+          </div>
+        </div>
+
+        <!-- Admin Stats Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+          <div class="stat-card stat-brown">
+            <div class="stat-info">
+              <span class="stat-label">Total Members</span>
+              <span class="stat-value" id="statTotalMembers">--</span>
+            </div>
+            <div class="stat-icon">👥</div>
+          </div>
+
+          <div class="stat-card stat-orange">
+            <div class="stat-info">
+              <span class="stat-label">Active Job Openings</span>
+              <span class="stat-value" id="statActiveJobs">--</span>
+            </div>
+            <div class="stat-icon">💼</div>
+          </div>
+
+          <div class="stat-card stat-rust">
+            <div class="stat-info">
+              <span class="stat-label">Community Posts</span>
+              <span class="stat-value" id="statTotalPosts">--</span>
+            </div>
+            <div class="stat-icon">📰</div>
+          </div>
+
+          <div class="stat-card stat-green">
+            <div class="stat-info">
+              <span class="stat-label">Flagged Reports</span>
+              <span class="stat-value" id="statPendingReports">--</span>
+            </div>
+            <div class="stat-icon">⚠️</div>
+          </div>
+        </div>
+
+        <!-- Recent Members Table -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Registered Members (Latest)</h3>
+            <a href="/admin/members.html" class="btn btn-sm btn-outline">Manage All Members</a>
+          </div>
+          <div class="data-table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Taluka</th>
+                  <th>Profession</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminMembersTableBody">
+                <!-- Dynamically populated via js/admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initNavigation } from '/js/navigation.js';
+    import { initAdminDashboard } from '/js/admin.js';
+
+    (async () => {
+      await initNavigation('admin');
+      await initAdminDashboard();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Board | Dharashiv Foundation</title>
+  <meta name="description" content="Browse local employment opportunities and post vacancies across Dharashiv district.">
+  <link rel="icon" type="image/svg+xml" href="/assets/logos/favicon.svg">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/jobs.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <div id="sidebarContainer"></div>
+
+    <div class="app-main">
+      <div id="headerContainer"></div>
+
+      <main class="app-content">
+
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Regional Job Board</h1>
+            <p class="page-subtitle">Connect with verified employers, engineering firms, agri-enterprises, and hospitals across Dharashiv.</p>
+          </div>
+          <div style="display: flex; gap: 0.75rem;">
+            <a href="/applications.html" class="btn btn-secondary">My Applications</a>
+            <button class="btn btn-primary" id="openPostJobModalBtn">+ Post a Vacancy</button>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="jobs-filter-bar">
+          <div class="filter-input-wrap">
+            <input type="text" id="jobSearchInput" class="form-control" placeholder="Search role title, company, or skills..." />
+          </div>
+
+          <div style="min-width: 160px;">
+            <select id="filterJobTaluka" class="form-select">
+              <option value="">All Talukas</option>
+              <option value="Dharashiv">Dharashiv</option>
+              <option value="Tuljapur">Tuljapur</option>
+              <option value="Omerga">Omerga</option>
+              <option value="Paranda">Paranda</option>
+              <option value="Bhoom">Bhoom</option>
+              <option value="Kalamb">Kalamb</option>
+              <option value="Washi">Washi</option>
+              <option value="Lohara">Lohara</option>
+            </select>
+          </div>
+
+          <div style="min-width: 150px;">
+            <select id="filterJobType" class="form-select">
+              <option value="">All Job Types</option>
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+              <option value="Remote">Remote</option>
+              <option value="Contract">Contract</option>
+              <option value="Internship">Internship</option>
+            </select>
+          </div>
+
+          <div style="min-width: 180px;">
+            <select id="filterJobCategory" class="form-select">
+              <option value="">All Categories</option>
+              <option value="Information Technology & Software">IT & Software</option>
+              <option value="Agriculture & Agri-Tech">Agri-Tech & Dairy</option>
+              <option value="Renewable Energy & Solar">Solar & Energy</option>
+              <option value="Healthcare & Pharmaceuticals">Healthcare</option>
+              <option value="Manufacturing & Engineering">Manufacturing</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Job Cards Container -->
+        <div id="jobsListContainer"></div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Post Job Modal -->
+  <div class="modal-backdrop" id="postJobModal">
+    <div class="modal-container" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Post a Job Vacancy</h3>
+        <button class="modal-close" data-dismiss="modal">&times;</button>
+      </div>
+      <form id="postJobForm">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="newJobTitle">Job Role Title <span class="required">*</span></label>
+              <input type="text" id="newJobTitle" class="form-control" placeholder="e.g. Solar Engineer, Agri Field Lead" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="newJobCompany">Hiring Organization <span class="required">*</span></label>
+              <input type="text" id="newJobCompany" class="form-control" placeholder="e.g. Marathwada Solar Works" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="newJobTaluka">Taluka Location <span class="required">*</span></label>
+              <select id="newJobTaluka" class="form-select" required>
+                <option value="Dharashiv">Dharashiv</option>
+                <option value="Tuljapur">Tuljapur</option>
+                <option value="Omerga">Omerga</option>
+                <option value="Paranda">Paranda</option>
+                <option value="Bhoom">Bhoom</option>
+                <option value="Kalamb">Kalamb</option>
+                <option value="Washi">Washi</option>
+                <option value="Lohara">Lohara</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="newJobLocation">Specific Work Location <span class="required">*</span></label>
+              <input type="text" id="newJobLocation" class="form-control" placeholder="e.g. MIDC Phase 2, Dharashiv" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="newJobType">Job Type <span class="required">*</span></label>
+              <select id="newJobType" class="form-select" required>
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Contract">Contract</option>
+                <option value="Remote">Remote</option>
+                <option value="Internship">Internship</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="newJobCategory">Industry Sector <span class="required">*</span></label>
+              <select id="newJobCategory" class="form-select" required>
+                <option value="Information Technology & Software">Information Technology & Software</option>
+                <option value="Agriculture & Agri-Tech">Agriculture & Agri-Tech</option>
+                <option value="Renewable Energy & Solar">Renewable Energy & Solar</option>
+                <option value="Manufacturing & Engineering">Manufacturing & Engineering</option>
+                <option value="Healthcare & Pharmaceuticals">Healthcare & Pharmaceuticals</option>
+                <option value="Retail & Trade">Retail & Trade</option>
+                <option value="Education">Education</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="newJobSalary">Salary / Compensation</label>
+              <input type="text" id="newJobSalary" class="form-control" placeholder="e.g. ₹3,50,000 - ₹5,00,000 / yr" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="newJobDesc">Job Description & Responsibilities <span class="required">*</span></label>
+            <textarea id="newJobDesc" class="form-textarea" required placeholder="Detail the day-to-day duties, project context, and reporting line..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="newJobReqs">Requirements & Qualifications <span class="required">*</span></label>
+            <textarea id="newJobReqs" class="form-textarea" required placeholder="Required education, technical skills, languages (e.g. Marathi, English), experience..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="submitJobBtn">Post Vacancy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { requireAuth } from '/js/guards.js';
+    import { initNavigation } from '/js/navigation.js';
+    import { initJobsPage } from '/js/jobs.js';
+    import { setupModalDismissers } from '/js/ui.js';
+
+    (async () => {
+      const auth = await requireAuth();
+      if (!auth) return;
+
+      await initNavigation('jobs');
+      setupModalDismissers();
+      await initJobsPage();
+    })();
+  </script>
+</body>
+</html>

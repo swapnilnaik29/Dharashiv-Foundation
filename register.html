@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Profile | Dharashiv Foundation</title>
+  <meta name="description" content="Complete your Dharashiv Foundation member registration profile.">
+  <link rel="icon" type="image/svg+xml" href="/assets/logos/favicon.svg">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body style="background: var(--color-warm-bg); padding: 2rem 1rem;">
+
+  <div class="registration-container">
+    <div class="registration-header">
+      <img src="/assets/logos/logo-compact.svg" alt="Dharashiv Foundation" style="width: 54px; height: 54px; margin: 0 auto 1rem auto;" />
+      <h1 style="font-size: 1.6rem; font-weight: 800; color: #FFFFFF;">Complete Your Member Profile</h1>
+      <p style="color: #FFF0E2; opacity: 0.9; font-size: 0.9rem; margin-top: 0.25rem;">
+        Connect with fellow entrepreneurs, professionals, and innovators across Dharashiv district.
+      </p>
+    </div>
+
+    <div class="registration-steps">
+      <div class="reg-step-item completed">
+        <span class="reg-step-number">✓</span>
+        <span>Google Account Verified</span>
+      </div>
+      <div class="reg-step-item active">
+        <span class="reg-step-number">2</span>
+        <span>Regional & Professional Details</span>
+      </div>
+      <div class="reg-step-item">
+        <span class="reg-step-number">3</span>
+        <span>Join Network</span>
+      </div>
+    </div>
+
+    <div class="registration-body">
+      <form id="profileRegistrationForm" novalidate>
+
+        <!-- Section 1: Basic Identity -->
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary-dark-brown); margin-bottom: 1.25rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem;">
+          1. Identity & Google Account
+        </h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="regFullName">Full Name <span class="required">*</span></label>
+            <input type="text" id="regFullName" class="form-control" placeholder="e.g. Swapnil Patil" required />
+            <div class="form-error">Please provide your full name.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regEmail">Verified Google Email</label>
+            <input type="email" id="regEmail" class="form-control" readonly style="background: var(--color-warm-bg); cursor: not-allowed;" />
+            <div class="form-hint">Obtained securely from Google OAuth identity.</div>
+          </div>
+        </div>
+
+        <!-- Section 2: Regional Roots -->
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary-dark-brown); margin: 2rem 0 1.25rem 0; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem;">
+          2. Regional Roots in Dharashiv District
+        </h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="regTaluka">Taluka <span class="required">*</span></label>
+            <select id="regTaluka" class="form-select" required>
+              <option value="">Select your Taluka</option>
+              <option value="Dharashiv">Dharashiv (Osmanabad)</option>
+              <option value="Tuljapur">Tuljapur</option>
+              <option value="Omerga">Omerga</option>
+              <option value="Paranda">Paranda</option>
+              <option value="Bhoom">Bhoom</option>
+              <option value="Kalamb">Kalamb</option>
+              <option value="Washi">Washi</option>
+              <option value="Lohara">Lohara</option>
+              <option value="Other">Other / Non-Resident</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regVillage">Native Village / Town <span class="required">*</span></label>
+            <input type="text" id="regVillage" class="form-control" placeholder="e.g. Yedshi, Kati, Murum..." required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regCity">Current Residential City <span class="required">*</span></label>
+            <input type="text" id="regCity" class="form-control" placeholder="e.g. Dharashiv, Pune, Mumbai..." required />
+          </div>
+        </div>
+
+        <!-- Section 3: Professional & Business Profile -->
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary-dark-brown); margin: 2rem 0 1.25rem 0; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem;">
+          3. Profession & Member Category
+        </h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="regProfession">Profession / Member Type <span class="required">*</span></label>
+            <select id="regProfession" class="form-select" required>
+              <option value="">Select your profession</option>
+              <option value="Business Owner / Entrepreneur">Business Owner / Entrepreneur</option>
+              <option value="Professional / Employee">Professional / Corporate Employee</option>
+              <option value="Farmer / Agriculture">Farmer / Agri-Enterprise</option>
+              <option value="Doctor / Healthcare">Doctor / Healthcare Professional</option>
+              <option value="Educator / Teacher">Educator / Academic</option>
+              <option value="Freelancer">Freelancer / Independent Consultant</option>
+              <option value="Student">Student / Aspiring Professional</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Conditional Business Fields Section -->
+        <div id="businessFieldsSection" style="display: none; background: var(--color-warm-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 1.5rem;">
+          <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--color-primary-dark-brown); margin-bottom: 1rem;">
+            Enterprise / Commercial Details
+          </h4>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="regCompanyName">Company / Enterprise Name</label>
+              <input type="text" id="regCompanyName" class="form-control" placeholder="e.g. Sina Valley Solar Ltd." />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="regBusinessCategory">Primary Industry / Sector</label>
+              <select id="regBusinessCategory" class="form-select">
+                <option value="Information Technology & Software">Information Technology & Software</option>
+                <option value="Agriculture & Agri-Tech">Agriculture & Agri-Tech</option>
+                <option value="Manufacturing & Engineering">Manufacturing & Engineering</option>
+                <option value="Healthcare & Pharmaceuticals">Healthcare & Pharmaceuticals</option>
+                <option value="Renewable Energy & Solar">Renewable Energy & Solar</option>
+                <option value="Retail & Wholesale Trade">Retail & Wholesale Trade</option>
+                <option value="Education & Skill Training">Education & Skill Training</option>
+                <option value="Hospitality & Tourism">Hospitality & Tourism</option>
+                <option value="Construction & Real Estate">Construction & Real Estate</option>
+                <option value="Professional & Financial Services">Professional & Financial Services</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="regBusinessType">Business Legal Type</label>
+              <select id="regBusinessType" class="form-select">
+                <option value="Private Limited">Private Limited</option>
+                <option value="Proprietorship">Proprietorship</option>
+                <option value="Partnership / LLP">Partnership / LLP</option>
+                <option value="FPO / Cooperative">FPO / Farmer Cooperative</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regBusinessDesc">Brief Enterprise Description</label>
+            <textarea id="regBusinessDesc" class="form-textarea" placeholder="Explain what your organization builds, manufactures, or supplies in the region..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regServices">Key Services & Products Offered</label>
+            <input type="text" id="regServices" class="form-control" placeholder="e.g. Organic Pulses, Drip Systems, Solar Pumping, Cold Storage" />
+          </div>
+        </div>
+
+        <!-- Section 4: Networking Requirements -->
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary-dark-brown); margin: 2rem 0 1.25rem 0; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem;">
+          4. Networking Objectives
+        </h3>
+
+        <div class="form-group">
+          <label class="form-label">What are your primary goals on Dharashiv Foundation?</label>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-top: 0.5rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+              <input type="checkbox" name="interests" value="B2B Clients" checked />
+              Finding B2B Clients & Buyers
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+              <input type="checkbox" name="interests" value="Hiring" checked />
+              Hiring Regional Talent
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+              <input type="checkbox" name="interests" value="Funding" />
+              Investment & Capital Funding
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+              <input type="checkbox" name="interests" value="Mentorship" checked />
+              Youth Mentorship & Guidance
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+              <input type="checkbox" name="interests" value="Vendor Partnerships" />
+              Suppliers & Vendor Tie-ups
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+              <input type="checkbox" name="interests" value="Community Projects" />
+              Social & Heritage Development
+            </label>
+          </div>
+        </div>
+
+        <!-- Section 5: Web & Social Links -->
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary-dark-brown); margin: 2rem 0 1.25rem 0; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem;">
+          5. Website & LinkedIn (Optional)
+        </h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="regWebsite">Company Website</label>
+            <input type="url" id="regWebsite" class="form-control" placeholder="https://example.com" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="regLinkedIn">LinkedIn Profile URL</label>
+            <input type="url" id="regLinkedIn" class="form-control" placeholder="https://linkedin.com/in/username" />
+          </div>
+        </div>
+
+        <div style="margin-top: 2.5rem; display: flex; justify-content: flex-end; gap: 1rem;">
+          <button type="submit" class="btn btn-primary btn-lg" id="submitRegBtn">
+            Complete Registration & Go to Dashboard
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initRegistration } from '/js/registration.js';
+    initRegistration();
+  </script>
+</body>
+</html>
