@@ -358,22 +358,63 @@ CREATE POLICY "Update notifications" ON public.notifications FOR UPDATE TO authe
 
 ---
 
-### Step 3: Configure Supabase Storage Buckets
+### Step 3: Configure Supabase Storage Buckets (One-Click SQL Script)
 
-1. In Supabase Dashboard, navigate to **Storage**.
-2. Create the following 4 buckets:
-
-| Bucket Name | Access | Purpose |
-|---|---|---|
-| **`post-media`** | **Public** | Image uploads for social feed posts |
-| **`avatars`** | **Public** | User profile photos |
-| **`attachments`** | **Public** | Announcement attachments |
-| **`resumes`** | **Private** | Candidate resume documents (PDF, DOCX) |
-
-3. In the **SQL Editor**, run the Storage RLS policies:
+You can create all 4 storage buckets (`post-media`, `avatars`, `attachments`, `resumes`) and configure their access policies in a single run using the **SQL Editor**. This script is idempotent and handles existing policies cleanly:
 
 ```sql
--- Allow authenticated users to upload to post-media
+-- 1. Create or Update Storage Buckets
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES 
+  (
+    'post-media', 
+    'post-media', 
+    true, 
+    15728640, -- 15 MB
+    ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+  ),
+  (
+    'avatars', 
+    'avatars', 
+    true, 
+    10485760, -- 10 MB
+    ARRAY['image/jpeg', 'image/png', 'image/webp']
+  ),
+  (
+    'attachments', 
+    'attachments', 
+    true, 
+    20971520, -- 20 MB
+    ARRAY['application/pdf', 'image/jpeg', 'image/png']
+  ),
+  (
+    'resumes', 
+    'resumes', 
+    false, -- Private bucket for resumes
+    15728640, -- 15 MB
+    ARRAY['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+  )
+ON CONFLICT (id) DO UPDATE SET
+  public = EXCLUDED.public,
+  file_size_limit = EXCLUDED.file_size_limit,
+  allowed_mime_types = EXCLUDED.allowed_mime_types;
+
+-- 2. Ensure RLS is Enabled
+ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
+
+-- 3. Drop Existing Policies (Avoids "Policy Already Exists" error if re-run)
+DROP POLICY IF EXISTS "Auth users upload post-media" ON storage.objects;
+DROP POLICY IF EXISTS "Public view post-media" ON storage.objects;
+DROP POLICY IF EXISTS "Auth users delete post-media" ON storage.objects;
+DROP POLICY IF EXISTS "Auth users upload avatars" ON storage.objects;
+DROP POLICY IF EXISTS "Public view avatars" ON storage.objects;
+DROP POLICY IF EXISTS "Auth users update avatars" ON storage.objects;
+DROP POLICY IF EXISTS "Auth users upload attachments" ON storage.objects;
+DROP POLICY IF EXISTS "Public view attachments" ON storage.objects;
+DROP POLICY IF EXISTS "Applicants upload resumes" ON storage.objects;
+DROP POLICY IF EXISTS "Authorized view resumes" ON storage.objects;
+
+-- 4. Post Media Policies (Public read, authenticated upload)
 CREATE POLICY "Auth users upload post-media"
 ON storage.objects FOR INSERT TO authenticated
 WITH CHECK (bucket_id = 'post-media');
@@ -382,7 +423,11 @@ CREATE POLICY "Public view post-media"
 ON storage.objects FOR SELECT TO public
 USING (bucket_id = 'post-media');
 
--- Allow authenticated users to upload avatars
+CREATE POLICY "Auth users delete post-media"
+ON storage.objects FOR DELETE TO authenticated
+USING (bucket_id = 'post-media' AND (auth.uid() = owner OR public.is_admin(auth.uid())));
+
+-- 5. Avatar Policies (Public read, authenticated upload/update)
 CREATE POLICY "Auth users upload avatars"
 ON storage.objects FOR INSERT TO authenticated
 WITH CHECK (bucket_id = 'avatars');
@@ -391,12 +436,24 @@ CREATE POLICY "Public view avatars"
 ON storage.objects FOR SELECT TO public
 USING (bucket_id = 'avatars');
 
--- Allow applicants to upload resumes
+CREATE POLICY "Auth users update avatars"
+ON storage.objects FOR UPDATE TO authenticated
+USING (bucket_id = 'avatars' AND auth.uid() = owner);
+
+-- 6. Attachments Policies (Public read, authenticated upload)
+CREATE POLICY "Auth users upload attachments"
+ON storage.objects FOR INSERT TO authenticated
+WITH CHECK (bucket_id = 'attachments');
+
+CREATE POLICY "Public view attachments"
+ON storage.objects FOR SELECT TO public
+USING (bucket_id = 'attachments');
+
+-- 7. Resume Policies (Private bucket: authenticated upload & signed URL download)
 CREATE POLICY "Applicants upload resumes"
 ON storage.objects FOR INSERT TO authenticated
 WITH CHECK (bucket_id = 'resumes');
 
--- Private access to resumes
 CREATE POLICY "Authorized view resumes"
 ON storage.objects FOR SELECT TO authenticated
 USING (bucket_id = 'resumes');
