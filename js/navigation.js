@@ -3,27 +3,45 @@
  */
 
 import { signOut, getCurrentProfile } from './auth.js';
+import { getSupabase } from './supabase-client.js';
 import { mockStore } from './mock-store.js';
 
 export async function initNavigation(activeKey = '') {
   const profile = await getCurrentProfile();
   const isAdmin = profile?.role === 'admin';
 
+  let unreadCount = 0;
+  if (profile?.id) {
+    try {
+      const supabase = await getSupabase();
+      if (supabase.isMock) {
+        unreadCount = mockStore.getNotifications(profile.id).filter(n => !n.is_read).length;
+      } else {
+        const { count } = await supabase
+          .from('notifications')
+          .select('*', { count: 'exact', head: true })
+          .eq('recipient_id', profile.id)
+          .eq('is_read', false);
+        unreadCount = count || 0;
+      }
+    } catch (e) {
+      console.warn('Could not fetch unread notifications count:', e);
+    }
+  }
+
   // Render Sidebar
-  renderSidebar(profile, isAdmin, activeKey);
+  renderSidebar(profile, isAdmin, activeKey, unreadCount);
 
   // Render Header
-  renderHeader(profile);
+  renderHeader(profile, unreadCount);
 
   // Attach event listeners
   setupNavigationEvents();
 }
 
-function renderSidebar(profile, isAdmin, activeKey) {
+function renderSidebar(profile, isAdmin, activeKey, unreadNotifs = 0) {
   const sidebarContainer = document.getElementById('sidebarContainer');
   if (!sidebarContainer) return;
-
-  const unreadNotifs = mockStore.getNotifications(profile?.id || 'user-001').filter(n => !n.is_read).length;
 
   sidebarContainer.innerHTML = `
     <aside class="app-sidebar" id="appSidebar">
@@ -143,7 +161,7 @@ function renderSidebar(profile, isAdmin, activeKey) {
   `;
 }
 
-function renderHeader(profile) {
+function renderHeader(profile, unreadCount = 0) {
   const headerContainer = document.getElementById('headerContainer');
   if (!headerContainer) return;
 
@@ -161,8 +179,6 @@ function renderHeader(profile) {
   else if (currentPath.includes('profile')) pageTitle = 'Member Profile';
   else if (currentPath.includes('settings')) pageTitle = 'Account Settings';
   else if (currentPath.includes('admin')) pageTitle = 'Admin Management';
-
-  const unreadCount = mockStore.getNotifications(profile?.id || 'user-001').filter(n => !n.is_read).length;
 
   headerContainer.innerHTML = `
     <header class="app-header">

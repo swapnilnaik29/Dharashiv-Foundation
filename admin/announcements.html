@@ -80,6 +80,11 @@
         items = data || [];
       }
 
+      if (items.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--color-text-muted);">No announcements published yet.</td></tr>';
+        return;
+      }
+
       tbody.innerHTML = items.map(a => `
         <tr id="admin-ann-${a.id}">
           <td style="font-weight: 600; color: var(--color-primary-dark-brown);">${escapeHtml(a.title)}</td>

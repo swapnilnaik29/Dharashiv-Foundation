@@ -80,6 +80,11 @@
         events = data || [];
       }
 
+      if (events.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--color-text-muted);">No events scheduled yet.</td></tr>';
+        return;
+      }
+
       tbody.innerHTML = events.map(e => `
         <tr id="admin-evt-${e.id}">
           <td style="font-weight: 600; color: var(--color-primary-dark-brown);">${escapeHtml(e.title)}</td>

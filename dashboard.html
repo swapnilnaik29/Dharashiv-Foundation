@@ -42,13 +42,13 @@
           <div class="profile-completion-card">
             <div class="completion-header">
               <span>Profile Strength</span>
-              <span id="profileCompletionPercent" style="color: var(--color-primary-orange);">100%</span>
+              <span id="profileCompletionPercent" style="color: var(--color-primary-orange);">0%</span>
             </div>
             <div class="progress-bar">
-              <div class="progress-fill" id="profileCompletionFill" style="width: 100%;"></div>
+              <div class="progress-fill" id="profileCompletionFill" style="width: 0%;"></div>
             </div>
             <div class="completion-text" id="profileCompletionHint">
-              ✓ All regional and business details completed!
+              Loading profile details...
             </div>
           </div>
         </section>
@@ -57,7 +57,7 @@
         <div class="community-ticker">
           <span class="ticker-label">Live Update</span>
           <div class="ticker-content" id="dashboardTickerText">
-            Dharashiv Agri & Tech Summit 2026 registration is open • 45 new Solar Pump installations completed in Paranda • New IT & Web Developer vacancies posted in Dharashiv MIDC.
+            Welcome to Dharashiv Foundation • Regional Community & Business Networking Platform across all 8 talukas.
           </div>
         </div>
 
@@ -181,6 +181,7 @@
 
       const { profile } = auth;
       await initNavigation('dashboard');
+      const supabase = await getSupabase();
 
       // Set greeting
       const greeting = document.getElementById('welcomeUserGreeting');
@@ -188,93 +189,170 @@
         greeting.textContent = `Namaskar, ${profile.full_name.split(' ')[0]}!`;
       }
 
+      // Calculate dynamic profile completion
+      const profileFields = ['full_name', 'taluka', 'native_village', 'current_city', 'profession', 'company_name', 'business_category', 'services_offered', 'business_description'];
+      const filledFields = profileFields.filter(f => Boolean(profile?.[f] && String(profile[f]).trim()));
+      const percent = Math.round((filledFields.length / profileFields.length) * 100);
+      const percentEl = document.getElementById('profileCompletionPercent');
+      const fillEl = document.getElementById('profileCompletionFill');
+      const hintEl = document.getElementById('profileCompletionHint');
+      if (percentEl) percentEl.textContent = `${percent}%`;
+      if (fillEl) fillEl.style.width = `${percent}%`;
+      if (hintEl) {
+        if (percent === 100) {
+          hintEl.textContent = '✓ All regional and business details completed!';
+        } else {
+          hintEl.innerHTML = `<a href="/profile.html" style="color: var(--color-primary-rust); text-decoration: underline;">Complete missing details (${percent}%)</a>`;
+        }
+      }
+
       // Populate People You May Know
       const peopleGrid = document.getElementById('peopleYouMayKnowGrid');
-      const otherMembers = mockStore.getProfiles().filter(p => p.id !== profile.id).slice(0, 3);
+      let otherMembers = [];
+      if (supabase.isMock) {
+        otherMembers = mockStore.getProfiles().filter(p => p.id !== profile?.id).slice(0, 3);
+      } else {
+        const { data } = await supabase.from('profiles').select('*').neq('id', profile?.id).eq('is_active', true).limit(3);
+        otherMembers = data || [];
+      }
 
       if (peopleGrid) {
-        peopleGrid.innerHTML = otherMembers.map(m => `
-          <div style="background: var(--color-warm-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1rem; text-align: center;">
-            <img src="${m.avatar_url || '/assets/avatars/default-avatar.svg'}" style="width: 56px; height: 56px; border-radius: 9999px; margin: 0 auto 0.5rem auto; object-fit: cover;" alt="Avatar" />
-            <div style="font-weight: 700; color: var(--color-primary-dark-brown); font-size: 0.9rem;">${escapeHtml(m.full_name)}</div>
-            <div style="font-size: 0.72rem; color: var(--color-primary-rust); font-weight: 600;">${escapeHtml(m.profession || 'Member')}</div>
-            <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.75rem;">📍 ${escapeHtml(m.taluka || 'Dharashiv')}</div>
-            <a href="/profile.html?id=${m.id}" class="btn btn-sm btn-outline" style="width: 100%;">View Profile</a>
-          </div>
-        `).join('');
+        if (otherMembers.length === 0) {
+          peopleGrid.innerHTML = '<div style="grid-column: 1 / -1; padding: 1.5rem; text-align: center; color: var(--color-text-muted); font-size: 0.88rem;">No other members registered yet.</div>';
+        } else {
+          peopleGrid.innerHTML = otherMembers.map(m => `
+            <div style="background: var(--color-warm-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1rem; text-align: center;">
+              <img src="${m.avatar_url || '/assets/avatars/default-avatar.svg'}" style="width: 56px; height: 56px; border-radius: 9999px; margin: 0 auto 0.5rem auto; object-fit: cover;" alt="Avatar" />
+              <div style="font-weight: 700; color: var(--color-primary-dark-brown); font-size: 0.9rem;">${escapeHtml(m.full_name)}</div>
+              <div style="font-size: 0.72rem; color: var(--color-primary-rust); font-weight: 600;">${escapeHtml(m.profession || 'Member')}</div>
+              <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.75rem;">📍 ${escapeHtml(m.taluka || 'Dharashiv')}</div>
+              <a href="/profile.html?id=${m.id}" class="btn btn-sm btn-outline" style="width: 100%;">View Profile</a>
+            </div>
+          `).join('');
+        }
       }
 
       // Populate Recent Posts Preview
       const postsContainer = document.getElementById('recentPostsPreviewContainer');
-      const recentPosts = mockStore.getPosts().slice(0, 2);
+      let recentPosts = [];
+      if (supabase.isMock) {
+        recentPosts = mockStore.getPosts().slice(0, 2);
+      } else {
+        const { data } = await supabase.from('posts').select('*, author:profiles(*)').order('created_at', { ascending: false }).limit(2);
+        recentPosts = data || [];
+      }
+
       if (postsContainer) {
-        postsContainer.innerHTML = recentPosts.map(p => `
-          <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border-light);">
-            <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 0.5rem;">
-              <img src="${p.author?.avatar_url || '/assets/avatars/default-avatar.svg'}" style="width: 36px; height: 36px; border-radius: 9999px;" alt="Avatar" />
-              <div>
-                <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary-dark-brown);">${escapeHtml(p.author?.full_name || 'Member')}</div>
-                <div style="font-size: 0.72rem; color: var(--color-text-muted);">${formatRelativeTime(p.created_at)} • 📍 ${escapeHtml(p.author?.taluka || 'Dharashiv')}</div>
+        if (recentPosts.length === 0) {
+          postsContainer.innerHTML = '<div style="padding: 1.5rem; text-align: center; color: var(--color-text-muted); font-size: 0.88rem;">No community posts yet. Share an update on the feed!</div>';
+        } else {
+          postsContainer.innerHTML = recentPosts.map(p => `
+            <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border-light);">
+              <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 0.5rem;">
+                <img src="${p.author?.avatar_url || '/assets/avatars/default-avatar.svg'}" style="width: 36px; height: 36px; border-radius: 9999px;" alt="Avatar" />
+                <div>
+                  <div style="font-weight: 700; font-size: 0.85rem; color: var(--color-primary-dark-brown);">${escapeHtml(p.author?.full_name || 'Member')}</div>
+                  <div style="font-size: 0.72rem; color: var(--color-text-muted);">${formatRelativeTime(p.created_at)} • 📍 ${escapeHtml(p.author?.taluka || 'Dharashiv')}</div>
+                </div>
+              </div>
+              <p style="font-size: 0.88rem; line-height: 1.5; color: var(--color-text-primary); margin-bottom: 0.75rem;">
+                ${escapeHtml((p.content || '').slice(0, 150))}${p.content && p.content.length > 150 ? '...' : ''}
+              </p>
+              <div style="display: flex; gap: 1rem; font-size: 0.75rem; color: var(--color-text-muted);">
+                <span>❤️ ${p.likes_count || 0} Likes</span>
+                <span>💬 ${p.comments_count || 0} Comments</span>
               </div>
             </div>
-            <p style="font-size: 0.88rem; line-height: 1.5; color: var(--color-text-primary); margin-bottom: 0.75rem;">
-              ${escapeHtml(p.content.slice(0, 150))}...
-            </p>
-            <div style="display: flex; gap: 1rem; font-size: 0.75rem; color: var(--color-text-muted);">
-              <span>❤️ ${p.likes_count || 0} Likes</span>
-              <span>💬 ${p.comments_count || 0} Comments</span>
-            </div>
-          </div>
-        `).join('');
+          `).join('');
+        }
       }
 
       // Populate Events Preview
       const eventsContainer = document.getElementById('dashboardEventsPreview');
-      const events = mockStore.getEvents().slice(0, 2);
+      let events = [];
+      if (supabase.isMock) {
+        events = mockStore.getEvents().slice(0, 2);
+      } else {
+        const { data } = await supabase.from('events').select('*').order('event_date', { ascending: true }).limit(2);
+        events = data || [];
+      }
+
       if (eventsContainer) {
-        eventsContainer.innerHTML = events.map(e => {
-          const d = new Date(e.event_date);
-          return `
-            <div class="event-mini-item">
-              <div class="event-date-badge">
-                <span class="event-month">${d.toLocaleString('en-IN', { month: 'short' })}</span>
-                <span class="event-day">${d.getDate()}</span>
+        if (events.length === 0) {
+          eventsContainer.innerHTML = '<div style="padding: 1.25rem; text-align: center; color: var(--color-text-muted); font-size: 0.85rem;">No upcoming events scheduled.</div>';
+        } else {
+          eventsContainer.innerHTML = events.map(e => {
+            const d = new Date(e.event_date);
+            return `
+              <div class="event-mini-item">
+                <div class="event-date-badge">
+                  <span class="event-month">${d.toLocaleString('en-IN', { month: 'short' })}</span>
+                  <span class="event-day">${d.getDate()}</span>
+                </div>
+                <div class="event-mini-info">
+                  <div class="event-mini-title">${escapeHtml(e.title)}</div>
+                  <div class="event-mini-loc">📍 ${escapeHtml(e.venue || 'Venue')}, ${escapeHtml(e.taluka || 'Dharashiv')}</div>
+                </div>
               </div>
-              <div class="event-mini-info">
-                <div class="event-mini-title">${escapeHtml(e.title)}</div>
-                <div class="event-mini-loc">📍 ${escapeHtml(e.venue)}, ${escapeHtml(e.taluka)}</div>
-              </div>
-            </div>
-          `;
-        }).join('');
+            `;
+          }).join('');
+        }
       }
 
       // Populate Announcements Preview
       const annContainer = document.getElementById('dashboardAnnouncementsPreview');
-      const anns = mockStore.getAnnouncements().slice(0, 2);
+      let anns = [];
+      if (supabase.isMock) {
+        anns = mockStore.getAnnouncements().slice(0, 2);
+      } else {
+        const { data } = await supabase.from('announcements').select('*').eq('status', 'approved').order('created_at', { ascending: false }).limit(2);
+        anns = data || [];
+      }
+
       if (annContainer) {
-        annContainer.innerHTML = anns.map(a => `
-          <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--color-border-light);">
-            <span class="badge ${a.priority === 'high' ? 'badge-red' : 'badge-orange'}" style="font-size: 0.65rem; margin-bottom: 0.35rem;">
-              ${a.is_official ? 'Official Notice' : 'Notice'}
-            </span>
-            <div style="font-weight: 600; font-size: 0.85rem; color: var(--color-primary-dark-brown);">${escapeHtml(a.title)}</div>
-            <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.2rem;">${formatDate(a.created_at)}</div>
-          </div>
-        `).join('');
+        if (anns.length === 0) {
+          annContainer.innerHTML = '<div style="padding: 1.25rem; text-align: center; color: var(--color-text-muted); font-size: 0.85rem;">No announcements at this time.</div>';
+        } else {
+          annContainer.innerHTML = anns.map(a => `
+            <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--color-border-light);">
+              <span class="badge ${a.priority === 'high' ? 'badge-red' : 'badge-orange'}" style="font-size: 0.65rem; margin-bottom: 0.35rem;">
+                ${a.is_official ? 'Official Notice' : 'Notice'}
+              </span>
+              <div style="font-weight: 600; font-size: 0.85rem; color: var(--color-primary-dark-brown);">${escapeHtml(a.title)}</div>
+              <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.2rem;">${formatDate(a.created_at)}</div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // Update ticker with real announcement if available
+      const tickerText = document.getElementById('dashboardTickerText');
+      if (tickerText && anns.length > 0) {
+        tickerText.textContent = anns.map(a => a.title).join(' • ');
       }
 
       // Populate Featured Jobs Preview
       const jobsContainer = document.getElementById('dashboardJobsPreview');
-      const jobs = mockStore.getJobs().slice(0, 2);
+      let jobs = [];
+      if (supabase.isMock) {
+        jobs = mockStore.getJobs().slice(0, 2);
+      } else {
+        const { data } = await supabase.from('jobs').select('*').eq('status', 'active').order('created_at', { ascending: false }).limit(2);
+        jobs = data || [];
+      }
+
       if (jobsContainer) {
-        jobsContainer.innerHTML = jobs.map(j => `
-          <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--color-border-light);">
-            <a href="/job-details.html?id=${j.id}" style="font-weight: 700; font-size: 0.9rem; color: var(--color-primary-dark-brown);">${escapeHtml(j.title)}</a>
-            <div style="font-size: 0.8rem; color: var(--color-primary-rust);">${escapeHtml(j.company_name)}</div>
-            <div style="font-size: 0.72rem; color: var(--color-text-muted); margin-top: 0.2rem;">📍 ${escapeHtml(j.taluka)} • 🕒 ${escapeHtml(j.job_type)}</div>
-          </div>
-        `).join('');
+        if (jobs.length === 0) {
+          jobsContainer.innerHTML = '<div style="padding: 1.25rem; text-align: center; color: var(--color-text-muted); font-size: 0.85rem;">No active job openings right now.</div>';
+        } else {
+          jobsContainer.innerHTML = jobs.map(j => `
+            <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--color-border-light);">
+              <a href="/job-details.html?id=${j.id}" style="font-weight: 700; font-size: 0.9rem; color: var(--color-primary-dark-brown);">${escapeHtml(j.title)}</a>
+              <div style="font-size: 0.8rem; color: var(--color-primary-rust);">${escapeHtml(j.company_name)}</div>
+              <div style="font-size: 0.72rem; color: var(--color-text-muted); margin-top: 0.2rem;">📍 ${escapeHtml(j.taluka)} • 🕒 ${escapeHtml(j.job_type)}</div>
+            </div>
+          `).join('');
+        }
       }
 
     })();

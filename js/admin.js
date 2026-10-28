@@ -68,6 +68,11 @@ export async function loadRecentMembersTable() {
     profiles = data || [];
   }
 
+  if (profiles.length === 0) {
+    container.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--color-text-muted);">No registered members found.</td></tr>';
+    return;
+  }
+
   container.innerHTML = profiles.map(p => `
     <tr>
       <td>

@@ -59,7 +59,7 @@ export async function filterMembers(currentProfile) {
     connections = mockStore.getConnections(currentProfile.id);
   } else {
     const { data: profs } = await supabase.from('profiles').select('*').neq('id', currentProfile.id);
-    const { data: conns } = await supabase.from('connections').select('*')
+    const { data: conns } = await supabase.from('connections').select('*, requester:profiles!requester_id(*), recipient:profiles!recipient_id(*)')
       .or(`requester_id.eq.${currentProfile.id},recipient_id.eq.${currentProfile.id}`);
     members = profs || [];
     connections = conns || [];
@@ -213,7 +213,7 @@ export async function loadConnectionsData(currentProfile) {
   if (supabase.isMock) {
     connections = mockStore.getConnections(currentProfile.id);
   } else {
-    const { data } = await supabase.from('connections').select('*')
+    const { data } = await supabase.from('connections').select('*, requester:profiles!requester_id(*), recipient:profiles!recipient_id(*)')
       .or(`requester_id.eq.${currentProfile.id},recipient_id.eq.${currentProfile.id}`);
     connections = data || [];
   }
@@ -226,7 +226,7 @@ export async function loadConnectionsData(currentProfile) {
     requestsList.innerHTML = '<div style="color: var(--color-text-muted); font-size: 0.85rem; padding: 1rem 0;">No pending connection requests.</div>';
   } else {
     requestsList.innerHTML = pendingIncoming.map(c => {
-      const sender = mockStore.getProfile(c.requester_id);
+      const sender = c.requester || (supabase.isMock ? mockStore.getProfile(c.requester_id) : null);
       return `
         <div class="card" style="padding: 1rem; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between;">
           <div style="display: flex; align-items: center; gap: 0.75rem;">
@@ -258,7 +258,7 @@ export async function loadConnectionsData(currentProfile) {
   } else {
     activeList.innerHTML = accepted.map(c => {
       const otherId = c.requester_id === currentProfile.id ? c.recipient_id : c.requester_id;
-      const other = mockStore.getProfile(otherId);
+      const other = (c.requester_id === currentProfile.id ? c.recipient : c.requester) || (supabase.isMock ? mockStore.getProfile(otherId) : null);
       return `
         <div class="card" style="padding: 1.25rem; margin-bottom: 0.85rem; display: flex; align-items: center; justify-content: space-between;">
           <div style="display: flex; align-items: center; gap: 1rem;">

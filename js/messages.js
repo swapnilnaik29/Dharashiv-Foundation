@@ -40,7 +40,14 @@ async function loadConversations(currentProfile, targetUserId = null) {
 
   // If URL specified ?with=userId, ensure conversation exists
   if (targetUserId && targetUserId !== currentProfile.id) {
-    const targetUser = mockStore.getProfile(targetUserId);
+    let targetUser = null;
+    if (supabase.isMock) {
+      targetUser = mockStore.getProfile(targetUserId);
+    } else {
+      const { data } = await supabase.from('profiles').select('*').eq('id', targetUserId).maybeSingle();
+      targetUser = data;
+    }
+
     if (targetUser) {
       activeRecipientProfile = targetUser;
       // Check existing
@@ -59,8 +66,19 @@ async function loadConversations(currentProfile, targetUserId = null) {
             participants: [currentProfile.id, targetUserId],
             updated_at: new Date().toISOString()
           };
+          if (!mockStore.data.conversations) mockStore.data.conversations = [];
           mockStore.data.conversations.unshift(conv);
           mockStore.save();
+        } else {
+          const { data: newConv } = await supabase.from('conversations').insert({}).select().single();
+          if (newConv) {
+            await supabase.from('conversation_participants').insert([
+              { conversation_id: newConv.id, user_id: currentProfile.id },
+              { conversation_id: newConv.id, user_id: targetUserId }
+            ]);
+            conv = newConv;
+            conversations.unshift(conv);
+          }
         }
       }
       activeConversationId = conv?.id;
@@ -72,11 +90,19 @@ async function loadConversations(currentProfile, targetUserId = null) {
     return;
   }
 
-  convList.innerHTML = conversations.map(c => {
+  const renderedItems = await Promise.all(conversations.map(async (c) => {
     let otherUser = null;
     if (supabase.isMock) {
-      const otherId = c.participants.find(id => id !== currentProfile.id);
+      const otherId = (c.participants || []).find(id => id !== currentProfile.id);
       otherUser = mockStore.getProfile(otherId);
+    } else {
+      const { data: partData } = await supabase
+        .from('conversation_participants')
+        .select('user:profiles(*)')
+        .eq('conversation_id', c.id)
+        .neq('user_id', currentProfile.id)
+        .maybeSingle();
+      otherUser = partData?.user;
     }
 
     const isActive = c.id === activeConversationId;
@@ -89,15 +115,22 @@ async function loadConversations(currentProfile, targetUserId = null) {
         </div>
       </div>
     `;
-  }).join('');
+  }));
+
+  convList.innerHTML = renderedItems.join('');
 
   // Attach click listener
   convList.querySelectorAll('.conversation-item').forEach(item => {
-    item.addEventListener('click', () => {
+    item.addEventListener('click', async () => {
       const convId = item.dataset.convId;
       const otherId = item.dataset.userId;
       activeConversationId = convId;
-      activeRecipientProfile = mockStore.getProfile(otherId);
+      if (supabase.isMock) {
+        activeRecipientProfile = mockStore.getProfile(otherId);
+      } else if (otherId) {
+        const { data } = await supabase.from('profiles').select('*').eq('id', otherId).maybeSingle();
+        activeRecipientProfile = data;
+      }
       loadConversations(currentProfile);
       loadChatMessages(currentProfile, convId);
     });

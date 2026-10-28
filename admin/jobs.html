@@ -78,6 +78,11 @@
         jobs = data || [];
       }
 
+      if (jobs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem; color: var(--color-text-muted);">No job listings posted yet.</td></tr>';
+        return;
+      }
+
       tbody.innerHTML = jobs.map(j => `
         <tr id="admin-job-${j.id}">
           <td style="font-weight: 600; color: var(--color-primary-dark-brown);">${escapeHtml(j.title)}</td>

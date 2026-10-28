@@ -10,14 +10,19 @@ export async function signInWithGoogle() {
   const supabase = await getSupabase();
 
   if (supabase.isMock) {
-    // In mock demonstration mode: simulate Google login
-    const demoUser = mockStore.getCurrentUser();
+    let demoUser = mockStore.getCurrentUser();
     if (!demoUser) {
-      // Pick default demo user (Swapnil Patil - Admin)
-      const profiles = mockStore.getProfiles();
-      mockStore.setCurrentUser(profiles[0]);
+      demoUser = {
+        id: 'user-' + Date.now(),
+        email: 'user@dharashiv.org',
+        full_name: '',
+        role: 'member',
+        is_active: true,
+        is_profile_completed: false
+      };
+      mockStore.setCurrentUser(demoUser);
     }
-    window.location.href = '/dashboard.html';
+    window.location.href = demoUser.is_profile_completed ? '/dashboard.html' : '/register.html';
     return;
   }
 
@@ -86,7 +91,8 @@ export async function handleAuthCallback() {
   const supabase = await getSupabase();
 
   if (supabase.isMock) {
-    window.location.href = '/dashboard.html';
+    const user = mockStore.getCurrentUser();
+    window.location.href = user?.is_profile_completed ? '/dashboard.html' : '/register.html';
     return;
   }
 
