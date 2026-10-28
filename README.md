@@ -59,7 +59,7 @@ dharashiv-foundation/
 ├── assets/                    # Logos, avatars, and illustrations
 ├── css/                       # Modular design system & stylesheets
 ├── js/                        # Client logic (ES Modules)
-├── server.js                  # Local development server
+├── dev-server.js              # Local development server
 ├── vercel.json                # Vercel deployment configuration
 ├── package.json               # Package configuration
 ├── setup.md                   # Complete Supabase & Vercel deployment guide
@@ -72,7 +72,7 @@ dharashiv-foundation/
 
 Start the local development server:
 ```bash
-npm start
+npm run dev
 ```
 Open **`http://localhost:3000`** in your browser.
 

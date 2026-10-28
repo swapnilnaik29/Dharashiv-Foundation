@@ -1,12 +1,58 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/register", "destination": "/register.html" },
+    { "source": "/dashboard", "destination": "/dashboard.html" },
+    { "source": "/feed", "destination": "/feed.html" },
+    { "source": "/discover", "destination": "/discover.html" },
+    { "source": "/profile", "destination": "/profile.html" },
+    { "source": "/connections", "destination": "/connections.html" },
+    { "source": "/messages", "destination": "/messages.html" },
+    { "source": "/jobs", "destination": "/jobs.html" },
+    { "source": "/job-details", "destination": "/job-details.html" },
+    { "source": "/applications", "destination": "/applications.html" },
+    { "source": "/events", "destination": "/events.html" },
+    { "source": "/announcements", "destination": "/announcements.html" },
+    { "source": "/notifications", "destination": "/notifications.html" },
+    { "source": "/settings", "destination": "/settings.html" },
+    { "source": "/auth-callback", "destination": "/auth-callback.html" },
+    { "source": "/admin", "destination": "/admin/index.html" },
+    { "source": "/admin/", "destination": "/admin/index.html" },
+    { "source": "/admin/members", "destination": "/admin/members.html" },
+    { "source": "/admin/moderation", "destination": "/admin/moderation.html" },
+    { "source": "/admin/jobs", "destination": "/admin/jobs.html" },
+    { "source": "/admin/events", "destination": "/admin/events.html" },
+    { "source": "/admin/announcements", "destination": "/admin/announcements.html" },
+    { "source": "/admin/categories", "destination": "/admin/categories.html" },
+    { "source": "/admin/settings", "destination": "/admin/settings.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "X-Frame-Options", "value": "DENY" }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/css/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/js/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
     }
   ]

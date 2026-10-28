@@ -1,13 +1,12 @@
 {
   "name": "dharashiv-foundation",
   "version": "1.0.0",
-  "description": "Dharashiv Foundation — Cloud-Based Regional Community Network",
-  "main": "server.js",
+  "description": "Dharashiv Foundation — Regional Community & Business Networking Platform",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
-    "test": "node --check server.js"
+    "dev": "node dev-server.js",
+    "serve": "node dev-server.js",
+    "test": "node --check dev-server.js"
   },
   "keywords": [
     "supabase",
