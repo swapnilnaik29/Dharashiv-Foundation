@@ -6,7 +6,7 @@ import { getSupabase } from './supabase-client.js';
 import { getCurrentProfile } from './auth.js';
 import { mockStore } from './mock-store.js';
 import { showToast, formatRelativeTime, escapeHtml, openModal, closeModal } from './ui.js';
-import { uploadFileToS3 } from './uploads.js';
+import { uploadFileToStorage } from './uploads.js';
 
 let selectedMediaFile = null;
 
@@ -68,21 +68,21 @@ export async function initFeed() {
 
       try {
         let mediaUrl = null;
-        let s3Key = null;
+        let storagePath = null;
 
         if (selectedMediaFile) {
-          showToast('Uploading media to Amazon S3...', 'info');
-          const uploadRes = await uploadFileToS3({
+          showToast('Uploading media...', 'info');
+          const uploadRes = await uploadFileToStorage({
             file: selectedMediaFile,
             uploadType: 'post_media'
           });
           mediaUrl = uploadRes.fileUrl;
-          s3Key = uploadRes.objectKey;
+          storagePath = uploadRes.objectKey;
         }
 
         const category = postCategorySelect?.value || 'General';
 
-        await publishPost({ content, category, mediaUrl, s3Key });
+        await publishPost({ content, category, mediaUrl, storagePath });
 
         // Reset form
         postContentInput.value = '';
@@ -110,7 +110,7 @@ export async function initFeed() {
   await loadFeed();
 }
 
-async function publishPost({ content, category, mediaUrl, s3Key }) {
+async function publishPost({ content, category, mediaUrl, storagePath }) {
   const currentProfile = await getCurrentProfile();
   const supabase = await getSupabase();
 
@@ -135,7 +135,8 @@ async function publishPost({ content, category, mediaUrl, s3Key }) {
     await supabase.from('post_media').insert({
       post_id: post.id,
       media_url: mediaUrl,
-      s3_key: s3Key || 'posts/media.jpg'
+      storage_path: storagePath || 'posts/media.jpg',
+      s3_key: storagePath || 'posts/media.jpg'
     });
   }
 }

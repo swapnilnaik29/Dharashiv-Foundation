@@ -1,7 +1,7 @@
 /**
  * Dharashiv Foundation - Demonstration & Development Mock Store
  * Provides realistic localized data from Dharashiv district for testing
- * when live Supabase / AWS keys have not yet been provisioned.
+ * when live Supabase credentials have not yet been provisioned.
  * Persists in browser localStorage.
  */
 
@@ -22,7 +22,7 @@ const INITIAL_DATA = {
     business_category: 'Information Technology & Software',
     business_type: 'Private Limited',
     business_description: 'Building regional cloud infrastructure, IoT solutions for dairy & farm automation, and web applications.',
-    services_offered: 'Cloud Migration, Web Development, AWS/Supabase Architecture, IoT Automation',
+    services_offered: 'Cloud Migration, Web Development, Supabase Architecture, IoT Automation',
     networking_interests: ['Hiring', 'B2B Clients', 'Mentorship', 'Tech Collaboration'],
     website_url: 'https://marathwadacloud.com',
     linkedin_url: 'https://linkedin.com/in/swapnil-patil',
@@ -238,7 +238,7 @@ const INITIAL_DATA = {
       location: 'Dharashiv MIDC / Hybrid',
       job_type: 'Full-time',
       category: 'Information Technology & Software',
-      description: 'Looking for an enthusiastic engineer skilled in Cloud computing, JavaScript, PostgreSQL, and AWS/Supabase architectures to build regional community platforms.',
+      description: 'Looking for an enthusiastic engineer skilled in Cloud computing, JavaScript, PostgreSQL, and Supabase architectures to build regional community platforms.',
       requirements: 'Experience with REST APIs, SQL databases, Git, and responsive web design. Candidates from Dharashiv district preferred.',
       salary_range: '₹4,50,000 - ₹7,00,000 / year',
       status: 'active',
@@ -284,7 +284,8 @@ const INITIAL_DATA = {
       id: 'app-401',
       job_id: 'job-301',
       applicant_id: 'user-003',
-      resume_s3_key: 'resume/user-003/sample-resume.pdf',
+      resume_storage_path: 'resumes/user-003/sample-resume.pdf',
+      resume_s3_key: 'resumes/user-003/sample-resume.pdf',
       resume_filename: 'Ramesh_Shinde_Resume.pdf',
       cover_letter: 'Applying on behalf of health informatics consulting collaboration.',
       status: 'shortlisted',
@@ -590,7 +591,8 @@ export class MockStore {
       id: 'app-' + Date.now(),
       job_id: application.job_id,
       applicant_id: this.data.currentUser.id,
-      resume_s3_key: application.resume_s3_key || 'resumes/' + this.data.currentUser.id + '/resume.pdf',
+      resume_storage_path: application.resume_storage_path || application.resume_s3_key || 'resumes/' + this.data.currentUser.id + '/resume.pdf',
+      resume_s3_key: application.resume_storage_path || application.resume_s3_key || 'resumes/' + this.data.currentUser.id + '/resume.pdf',
       resume_filename: application.resume_filename || 'resume.pdf',
       cover_letter: application.cover_letter || '',
       status: 'submitted',

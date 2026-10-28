@@ -1,12 +1,12 @@
 /**
  * Dharashiv Foundation - Job Application & Resume Handler
- * Securely uploads candidate resumes to AWS S3 and enforces authorized download.
+ * Securely uploads candidate resumes to Supabase Storage and enforces authorized download.
  */
 
 import { getSupabase } from './supabase-client.js';
 import { getCurrentProfile } from './auth.js';
 import { mockStore } from './mock-store.js';
-import { uploadFileToS3, getAuthorizedDownloadUrl } from './uploads.js';
+import { uploadFileToStorage, getAuthorizedDownloadUrl } from './uploads.js';
 import { showToast, formatDate, escapeHtml, openModal, closeModal } from './ui.js';
 
 let selectedResumeFile = null;
@@ -78,7 +78,7 @@ function renderJobDetails(job, currentProfile) {
           <span class="job-chip">🕒 <strong>Job Type:</strong> ${escapeHtml(job.job_type)}</span>
           <span class="job-chip">💰 <strong>Salary:</strong> ${escapeHtml(job.salary_range || 'Competitive')}</span>
           <span class="job-chip">📍 <strong>Taluka:</strong> ${escapeHtml(job.taluka)}</span>
-          <span class="job-chip">🛡️ <strong>S3 Protected Resumes</strong></span>
+          <span class="job-chip">🛡️ <strong>Encrypted Resumes</strong></span>
         </div>
 
         <div style="margin-top: 2rem;">
@@ -129,11 +129,11 @@ function setupApplicationModal(job, currentProfile) {
 
       const submitBtn = document.getElementById('submitApplicationBtn');
       submitBtn.disabled = true;
-      submitBtn.innerHTML = 'Uploading Resume to S3...';
+      submitBtn.innerHTML = 'Uploading Resume...';
 
       try {
-        // 1. Upload to S3
-        const uploadRes = await uploadFileToS3({
+        // 1. Upload to storage
+        const uploadRes = await uploadFileToStorage({
           file: selectedResumeFile,
           uploadType: 'resume'
         });
@@ -147,6 +147,7 @@ function setupApplicationModal(job, currentProfile) {
         if (supabase.isMock) {
           mockStore.addApplication({
             job_id: job.id,
+            resume_storage_path: uploadRes.objectKey,
             resume_s3_key: uploadRes.objectKey,
             resume_filename: uploadRes.filename,
             cover_letter: coverLetter
@@ -155,6 +156,7 @@ function setupApplicationModal(job, currentProfile) {
           await supabase.from('job_applications').insert({
             job_id: job.id,
             applicant_id: currentProfile.id,
+            resume_storage_path: uploadRes.objectKey,
             resume_s3_key: uploadRes.objectKey,
             resume_filename: uploadRes.filename,
             cover_letter: coverLetter
@@ -288,7 +290,7 @@ async function loadReceivedApplications(currentProfile) {
     container.innerHTML = `
       <div class="empty-state">
         <h3 class="empty-state-title">No Candidate Applications Yet</h3>
-        <p class="empty-state-desc">When candidates apply for your posted vacancies, their applications and private S3 resumes will appear here.</p>
+        <p class="empty-state-desc">When candidates apply for your posted vacancies, their applications and resumes will appear here.</p>
       </div>
     `;
     return;
@@ -309,9 +311,9 @@ async function loadReceivedApplications(currentProfile) {
         <div style="display: flex; gap: 0.5rem; align-items: center;">
           <button class="btn btn-sm btn-primary download-resume-btn"
                   data-app-id="${a.id}"
-                  data-s3-key="${a.resume_s3_key}"
+                  data-storage-path="${a.resume_storage_path || a.resume_s3_key}"
                   data-filename="${a.resume_filename}">
-            📄 Download Resume (S3)
+            📄 Download Resume
           </button>
         </div>
       </div>
@@ -328,11 +330,11 @@ async function loadReceivedApplications(currentProfile) {
   document.querySelectorAll('.download-resume-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
       btn.disabled = true;
-      btn.textContent = 'Generating Secure S3 URL...';
+      btn.textContent = 'Generating Secure Link...';
       try {
         const downloadUrl = await getAuthorizedDownloadUrl({
           applicationId: btn.dataset.appId,
-          s3Key: btn.dataset.s3Key,
+          storagePath: btn.dataset.storagePath,
           filename: btn.dataset.filename
         });
 
@@ -344,12 +346,12 @@ async function loadReceivedApplications(currentProfile) {
         a.click();
         a.remove();
 
-        showToast('Secure download initiated via short-lived AWS S3 URL.', 'success');
+        showToast('Secure download initiated.', 'success');
       } catch (err) {
         showToast(err.message || 'Download failed.', 'error');
       } finally {
         btn.disabled = false;
-        btn.textContent = '📄 Download Resume (S3)';
+        btn.textContent = '📄 Download Resume';
       }
     });
   });

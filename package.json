@@ -10,9 +10,8 @@
     "test": "node --check server.js"
   },
   "keywords": [
-    "cloud-computing",
     "supabase",
-    "aws-s3",
+    "supabase-storage",
     "community-network",
     "dharashiv",
     "vanilla-js"

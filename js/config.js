@@ -1,24 +1,23 @@
 /**
  * Dharashiv Foundation - Client Configuration
- * Handles Supabase URL, Public Anon Key, and AWS S3 configuration.
- *
- * NOTE: For college presentation and local development, you can paste your
- * Supabase project credentials below. If left blank, the app will run in
- * "Development / Demonstration Mode" with rich local mock data from Dharashiv.
  */
 
 export const CONFIG = {
-  // Supabase Configuration (Client-safe public keys only)
+  // Supabase Configuration
   SUPABASE_URL: window.__ENV__?.SUPABASE_URL || 'https://placeholder-dharashiv.supabase.co',
   SUPABASE_ANON_KEY: window.__ENV__?.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder-anon-key',
 
-  // AWS Configuration (Used only for direct public asset path rendering)
-  AWS_REGION: window.__ENV__?.AWS_REGION || 'ap-south-1',
-  AWS_S3_BUCKET: window.__ENV__?.AWS_S3_BUCKET_NAME || 'dharashiv-foundation-storage',
+  // Storage Buckets
+  STORAGE_BUCKETS: {
+    POST_MEDIA: 'post-media',
+    RESUMES: 'resumes',
+    AVATARS: 'avatars',
+    ATTACHMENTS: 'attachments'
+  },
 
-  // Application Settings
+  // Regional Information
   APP_NAME: 'Dharashiv Foundation',
-  APP_TAGLINE: 'Cloud-Based Regional Community Network',
+  APP_TAGLINE: 'Regional Community & Business Networking Platform',
   DISTRICT: 'Dharashiv',
   TALUKAS: [
     'Dharashiv',
@@ -31,7 +30,7 @@ export const CONFIG = {
     'Lohara'
   ],
 
-  // Check if live Supabase is properly configured
+  // Check if live Supabase is configured
   isLiveSupabaseConfigured() {
     return (
       this.SUPABASE_URL &&
