@@ -399,10 +399,7 @@ ON CONFLICT (id) DO UPDATE SET
   file_size_limit = EXCLUDED.file_size_limit,
   allowed_mime_types = EXCLUDED.allowed_mime_types;
 
--- 2. Ensure RLS is Enabled
-ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
-
--- 3. Drop Existing Policies (Avoids "Policy Already Exists" error if re-run)
+-- 2. Drop Existing Policies (Avoids "Policy Already Exists" error if re-run)
 DROP POLICY IF EXISTS "Auth users upload post-media" ON storage.objects;
 DROP POLICY IF EXISTS "Public view post-media" ON storage.objects;
 DROP POLICY IF EXISTS "Auth users delete post-media" ON storage.objects;
