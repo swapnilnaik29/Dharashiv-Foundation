@@ -307,7 +307,9 @@ $$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
 #### 3. Row-Level Security (RLS)
 ```sql
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.posts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.post_media ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.comments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.likes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.connections ENABLE ROW LEVEL SECURITY;
@@ -317,9 +319,14 @@ ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.jobs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.job_applications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.event_registrations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.announcements ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.reports ENABLE ROW LEVEL SECURITY;
+
+-- Categories: Viewable by all, managed by admins
+CREATE POLICY "Categories viewable" ON public.categories FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Admins manage categories" ON public.categories FOR ALL TO authenticated USING (public.is_admin(auth.uid())) WITH CHECK (public.is_admin(auth.uid()));
 
 -- Profiles: Publicly viewable, update own profile
 CREATE POLICY "Profiles viewable" ON public.profiles FOR SELECT TO authenticated USING (true);
@@ -329,6 +336,15 @@ CREATE POLICY "Users update own profile" ON public.profiles FOR UPDATE TO authen
 CREATE POLICY "Posts viewable" ON public.posts FOR SELECT TO authenticated USING (true);
 CREATE POLICY "Users insert posts" ON public.posts FOR INSERT TO authenticated WITH CHECK (author_id = auth.uid());
 CREATE POLICY "Authors or admins delete posts" ON public.posts FOR DELETE TO authenticated USING (author_id = auth.uid() OR public.is_admin(auth.uid()));
+
+-- Post Media: Viewable by all, inserted by post authors
+CREATE POLICY "Post media viewable" ON public.post_media FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Post authors insert media" ON public.post_media FOR INSERT TO authenticated WITH CHECK (
+    EXISTS (SELECT 1 FROM public.posts p WHERE p.id = post_id AND p.author_id = auth.uid())
+);
+CREATE POLICY "Post authors delete media" ON public.post_media FOR DELETE TO authenticated USING (
+    EXISTS (SELECT 1 FROM public.posts p WHERE p.id = post_id AND (p.author_id = auth.uid() OR public.is_admin(auth.uid())))
+);
 
 -- Connections: Participants can view and manage
 CREATE POLICY "View connections" ON public.connections FOR SELECT TO authenticated USING (requester_id = auth.uid() OR recipient_id = auth.uid() OR public.is_admin(auth.uid()));
@@ -350,6 +366,14 @@ CREATE POLICY "View applications" ON public.job_applications FOR SELECT TO authe
     applicant_id = auth.uid() OR EXISTS (SELECT 1 FROM public.jobs j WHERE j.id = job_id AND j.poster_id = auth.uid()) OR public.is_admin(auth.uid())
 );
 CREATE POLICY "Apply for job" ON public.job_applications FOR INSERT TO authenticated WITH CHECK (applicant_id = auth.uid());
+
+-- Event Registrations
+CREATE POLICY "View event registrations" ON public.event_registrations FOR SELECT TO authenticated USING (
+    user_id = auth.uid() OR EXISTS (SELECT 1 FROM public.events e WHERE e.id = event_id AND e.organizer_id = auth.uid()) OR public.is_admin(auth.uid())
+);
+CREATE POLICY "Register for event" ON public.event_registrations FOR INSERT TO authenticated WITH CHECK (user_id = auth.uid());
+CREATE POLICY "Update own registration" ON public.event_registrations FOR UPDATE TO authenticated USING (user_id = auth.uid());
+CREATE POLICY "Cancel own registration" ON public.event_registrations FOR DELETE TO authenticated USING (user_id = auth.uid());
 
 -- Notifications
 CREATE POLICY "View notifications" ON public.notifications FOR SELECT TO authenticated USING (recipient_id = auth.uid());
