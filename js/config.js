@@ -4,8 +4,8 @@
 
 export const CONFIG = {
   // Supabase Configuration
-  SUPABASE_URL: window.__ENV__?.SUPABASE_URL || 'https://placeholder-dharashiv.supabase.co',
-  SUPABASE_ANON_KEY: window.__ENV__?.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder-anon-key',
+  SUPABASE_URL: window.__ENV__?.SUPABASE_URL || 'https://oikkzgcdsianrlnmctdu.supabase.co',
+  SUPABASE_ANON_KEY: window.__ENV__?.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pa2t6Z2Nkc2lhbnJsbm1jdGR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxODEwNzMsImV4cCI6MjEwODc1NzA3M30.5Z33vESrMA-WN-Lfgb_hmnBD0PJ8KOcG6rGA85m1fUA',
 
   // Storage Buckets
   STORAGE_BUCKETS: {
